@@ -4,6 +4,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.Board;
+import utils.Game;
 
 public class Main extends Application {
 
@@ -16,7 +17,7 @@ public class Main extends Application {
         primaryStage.setResizable(false);
         primaryStage.show();
 
-        Board board;
+        Game game = new Game();
     }
 
 

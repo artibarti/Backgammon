@@ -9,7 +9,11 @@ public class Board
         return fields;
     }
 
-    public Board() {}
+    public Board()
+    {
+        initBoard();
+    }
+
     public List<Field> fields;
 
     public void initBoard()
@@ -21,5 +25,15 @@ public class Board
             Field field = new Field(i);
             fields.add(field);
         }
+
+        fields.get(0).addCheckers(0, 2);
+        fields.get(5).addCheckers(1, 5);
+        fields.get(7).addCheckers(1, 3);
+        fields.get(11).addCheckers(0, 5);
+
+        fields.get(12).addCheckers(1, 5);
+        fields.get(17).addCheckers(0, 3);
+        fields.get(19).addCheckers(0, 5);
+        fields.get(23).addCheckers(1, 2);
     }
 }

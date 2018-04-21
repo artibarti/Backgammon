@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Field
@@ -9,6 +10,7 @@ public class Field
     public Field(int id)
     {
         this.id = id;
+        checkers = new ArrayList<>();
     }
 
     private List<Checker> checkers;
@@ -18,15 +20,21 @@ public class Field
         return checkers;
     }
 
-    public void addChecker(Checker checker)
+    public void addCheckers(int team, int count)
     {
-        checkers.add(checker);
+        for (int i = 0; i<count; i++)
+        {
+            checkers.add(new Checker(team));
+        }
     }
 
-    public void detractChecker(Checker checker)
+    public void detractCheckers(int count)
     {
-        if (checkers.size() != 0)
-            checkers.remove(checkers.size() - 1);
+        for (int i = 0; i<count; i++)
+        {
+            if (checkers.size() != 0)
+                checkers.remove(checkers.size() - 1);
+        }
     }
 
 }
