@@ -32,8 +32,8 @@ public class Board
         fields.get(11).addCheckers(0, 5);
 
         fields.get(12).addCheckers(1, 5);
-        fields.get(17).addCheckers(0, 3);
-        fields.get(19).addCheckers(0, 5);
+        fields.get(16).addCheckers(0, 3);
+        fields.get(18).addCheckers(0, 5);
         fields.get(23).addCheckers(1, 2);
     }
 }

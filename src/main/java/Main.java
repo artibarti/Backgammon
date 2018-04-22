@@ -1,9 +1,11 @@
+import controller.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import model.Board;
 import utils.Game;
 
 public class Main extends Application {
@@ -11,13 +13,18 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/main.fxml"));
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        AnchorPane root = fxmlLoader.load(getClass().getResource("/view/main.fxml"));
+
+        Scene scene = new Scene(root);
+        scene.getStylesheets().addAll(this.getClass().getResource("/resources/styles/styles.css").toExternalForm());
+
         primaryStage.setTitle("Backgammon");
-        primaryStage.setScene(new Scene(root));
+        primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
 
-        Game game = new Game();
     }
 
 

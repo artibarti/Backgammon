@@ -5,12 +5,12 @@ import java.util.List;
 
 public class Field
 {
-    private int id;
+    private int team;
 
-    public Field(int id)
+    public Field()
     {
-        this.id = id;
         checkers = new ArrayList<>();
+        team = -1;
     }
 
     private List<Checker> checkers;
@@ -22,6 +22,8 @@ public class Field
 
     public void addCheckers(int team, int count)
     {
+        this.team = team;
+
         for (int i = 0; i<count; i++)
         {
             checkers.add(new Checker(team));
@@ -35,6 +37,11 @@ public class Field
             if (checkers.size() != 0)
                 checkers.remove(checkers.size() - 1);
         }
+    }
+
+    public int getTeam()
+    {
+        return team;
     }
 
 }

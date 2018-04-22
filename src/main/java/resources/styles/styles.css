@@ -1,0 +1,54 @@
+
+#apMain{
+        -fx-background-image: url("/resources/pictures/bg_main.png");
+        -fx-background-repeat: no-repeat;
+        -fx-background-size: 1000 600;
+        -fx-background-position: center center;
+        -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+        }
+
+#hbMenu{
+        -fx-background-image: url("/resources/pictures/bg_menu.png");
+        -fx-background-repeat: no-repeat;
+        -fx-background-size: 350 500;
+        -fx-background-position: center center;
+}
+
+.button{
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-radius: 0;
+    -fx-background-color: transparent;
+    -fx-text-fill: #000000;
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+    -fx-padding: 10 20 10 20;
+}
+
+#apBoard{
+        -fx-background-image: url("/resources/pictures/board.png");
+        -fx-background-repeat: no-repeat;
+        -fx-background-size: 750 500;
+        -fx-background-position: center center;
+}
+
+.checker_white{
+        -fx-background-image: url("/resources/pictures/checker_white.png");
+        -fx-background-repeat: no-repeat;
+        -fx-background-size: 60 50;
+        -fx-background-position: center center;
+}
+
+.checker_black{
+        -fx-background-image: url("/resources/pictures/checker_black.png");
+        -fx-background-repeat: no-repeat;
+        -fx-background-size: 60 50;
+        -fx-background-position: center center;
+}
+
+.selectedField{
+        -fx-background-image: url("/resources/pictures/bg_menu.png");
+        -fx-background-repeat: no-repeat;
+        -fx-background-size: 60 250;
+        -fx-background-position: center center;
+}
