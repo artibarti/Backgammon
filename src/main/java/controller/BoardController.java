@@ -25,7 +25,10 @@ public class BoardController
     private MainController mainController;
     private Game game;
     private List<VBox> fields;
+
     private int currentField;
+    private int currentPlayer;
+    private int from;
 
     @FXML
     private void initialize()
@@ -60,6 +63,8 @@ public class BoardController
         game = new Game();
         syncronizeBoard();
         currentField = 0;
+        currentPlayer = 0;
+        from = -1;
     }
 
     public void setMainController(MainController mainController)
@@ -69,6 +74,11 @@ public class BoardController
 
     public void syncronizeBoard()
     {
+        for (int i = 0; i<24; i++)
+        {
+            fields.get(i).getChildren().clear();
+        }
+
         for (int i = 0; i < 24; i++)
         {
             for (int j = 0; j < game.getBoard().getFields().get(i).getCheckers().size(); j++)
@@ -132,17 +142,35 @@ public class BoardController
                     if (currentField < 23 && currentField >= 12) currentField = currentField + 1;
                     highlightSelectedField(old);
                 }
+                if (keyEvent.getCode() == KeyCode.ENTER)
+                {
+                    System.out.println("enter hit");
+                    if (from == -1)
+                    {
+                        if (game.canStep(currentField, 22, currentPlayer))
+                        {
+                            from = currentField;
+                        }
+                    }
+                    else if (from != -1)
+                    {
+                        if (game.canStep(from, currentField, currentPlayer))
+                        {
+                            game.step(from, currentField, currentPlayer);
+                            syncronizeBoard();
+                            from = -1;
+                            currentPlayer = 1;
+                        }
+                        from = -1;
+                    }
+                }
             }
         });
     }
 
     public void highlightSelectedField(int old)
     {
-        if (currentField < 0 || currentField > 23)
-            return;
-
         fields.get(old).getStyleClass().clear();
         fields.get(currentField).getStyleClass().add("selectedField");
-        System.out.println("selected field changed to " + currentField);
     }
 }

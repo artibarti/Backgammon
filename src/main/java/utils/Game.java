@@ -3,6 +3,8 @@ package utils;
 import model.Board;
 import model.Player;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class Game
 {
     private Player player1;
@@ -44,14 +46,23 @@ public class Game
 
     public boolean canStep(int from, int to, int player)
     {
-        if (board.getFields().get(from).getTeam() != player) return false;
+        if (player == 0 && from > to)   return false;
+        if (player == 1 && to > from)   return false;
+        if (board.getFields().get(from).getTeam() != player)    return false;
         if (board.getFields().get(to).getTeam() == player && board.getFields().get(to).getCheckers().size() == 5) return  false;
         if (board.getFields().get(to).getTeam() != player && board.getFields().get(to).getCheckers().size() > 1) return false;
+
         return true;
     }
 
     public void step(int from, int to, int player)
     {
+        board.getFields().get(from).deleteChecker(1);
+        board.getFields().get(to).addCheckers(player, 1);
+    }
 
+    public int getNumber()
+    {
+        return ThreadLocalRandom.current().nextInt(1, 7);
     }
 }

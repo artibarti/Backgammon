@@ -22,7 +22,7 @@ public class Board
 
         for (int i = 0; i<24; i++)
         {
-            Field field = new Field(i);
+            Field field = new Field();
             fields.add(field);
         }
 

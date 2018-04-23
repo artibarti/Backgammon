@@ -30,7 +30,7 @@ public class Field
         }
     }
 
-    public void detractCheckers(int count)
+    public void deleteChecker(int count)
     {
         for (int i = 0; i<count; i++)
         {
