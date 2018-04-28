@@ -10,66 +10,87 @@
    <children>
       <HBox prefHeight="600.0" prefWidth="1000.0">
          <children>
-            <VBox fx:id="vbLeft" prefHeight="600.0" prefWidth="100.0">
+            <VBox fx:id="vbRight" prefHeight="600.0" prefWidth="210.0">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="100.0">
-                     <children>
-                        <Pane prefHeight="100.0" prefWidth="50.0" style="-fx-background-color: #98AC29;" />
-                        <Pane prefHeight="100.0" prefWidth="50.0" style="-fx-background-color: #98ACD1;" />
-                     </children>
+                  <HBox fx:id="hbRightPlayer1" prefHeight="180.0" prefWidth="210.0" spacing="1.0">
+                     <padding>
+                        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
                   </HBox>
-               </children>
-               <padding>
-                  <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
-               </padding></VBox>
-            <VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0">
-               <children>
-                  <AnchorPane fx:id="apBoard" prefHeight="500.0" prefWidth="740.0">
+                  <VBox fx:id="dicePanel" alignment="CENTER" prefHeight="240.0" prefWidth="210.0" spacing="5.0">
                      <children>
-                        <VBox alignment="CENTER" prefHeight="500.0" prefWidth="750.0">
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="210.0">
                            <children>
-                              <HBox alignment="CENTER" prefHeight="250.0" prefWidth="750.0">
+                              <Pane fx:id="dice1" maxHeight="50.0" maxWidth="50.0" minHeight="50.0" minWidth="50.0" prefHeight="50.0" prefWidth="50.0" />
+                              <Pane fx:id="dice2" maxHeight="50.0" maxWidth="50.0" minHeight="50.0" minWidth="50.0" prefHeight="50.0" prefWidth="50.0" />
+                           </children></HBox>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="80.0" prefHeight="100.0" prefWidth="210.0">
+                           <children>
+                              <Pane fx:id="dice3" maxHeight="50.0" maxWidth="50.0" minHeight="50.0" minWidth="50.0" prefHeight="50.0" prefWidth="50.0" />
+                              <Pane fx:id="dice4" maxHeight="50.0" maxWidth="50.0" minHeight="50.0" minWidth="50.0" prefHeight="50.0" prefWidth="50.0" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <HBox fx:id="hbRightPlayer2" layoutX="10.0" layoutY="10.0" prefHeight="180.0" prefWidth="200.0" spacing="1.0">
+                     <padding>
+                        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                     </padding>
+                  </HBox>
+               </children></VBox>
+            <VBox alignment="CENTER" prefHeight="500.0" prefWidth="720.0">
+               <children>
+                  <HBox prefHeight="50.0" prefWidth="720.0" />
+                  <AnchorPane fx:id="apBoard" prefHeight="500.0" prefWidth="720.0">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="500.0" prefWidth="720.0">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="250.0" prefWidth="720.0">
                                  <children>
-                                    <VBox fx:id="field1" alignment="TOP_CENTER" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field2" alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field3" alignment="TOP_CENTER" layoutX="72.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field4" alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field5" alignment="TOP_CENTER" layoutX="72.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field6" alignment="TOP_CENTER" layoutX="134.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field7" alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field8" alignment="TOP_CENTER" layoutX="72.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field9" alignment="TOP_CENTER" layoutX="134.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field10" alignment="TOP_CENTER" layoutX="196.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field11" alignment="TOP_CENTER" layoutX="258.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field12" alignment="TOP_CENTER" layoutX="320.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
+                                    <VBox fx:id="field1" alignment="TOP_CENTER" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" HBox.hgrow="NEVER" />
+                                    <VBox fx:id="field2" alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" />
+                                    <VBox fx:id="field3" alignment="TOP_CENTER" layoutX="72.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" />
+                                    <VBox fx:id="field4" alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" />
+                                    <VBox fx:id="field5" alignment="TOP_CENTER" layoutX="72.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" />
+                                    <VBox fx:id="field6" alignment="TOP_CENTER" layoutX="134.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" />
+                                    <VBox fx:id="field7" alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" />
+                                    <VBox fx:id="field8" alignment="TOP_CENTER" layoutX="72.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" />
+                                    <VBox fx:id="field9" alignment="TOP_CENTER" layoutX="134.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" />
+                                    <VBox fx:id="field10" alignment="TOP_CENTER" layoutX="196.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" />
+                                    <VBox fx:id="field11" alignment="TOP_CENTER" layoutX="258.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" />
+                                    <VBox fx:id="field12" alignment="TOP_CENTER" layoutX="320.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" />
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="750.0">
+                              <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="720.0">
                                  <children>
-                                    <VBox fx:id="field24" alignment="BOTTOM_CENTER" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field23" alignment="BOTTOM_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field22" alignment="BOTTOM_CENTER" layoutX="72.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field21" alignment="BOTTOM_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field20" alignment="BOTTOM_CENTER" layoutX="72.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field19" alignment="BOTTOM_CENTER" layoutX="134.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field18" alignment="BOTTOM_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field17" alignment="BOTTOM_CENTER" layoutX="72.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field16" alignment="BOTTOM_CENTER" layoutX="134.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field15" alignment="BOTTOM_CENTER" layoutX="196.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field14" alignment="BOTTOM_CENTER" layoutX="258.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
-                                    <VBox fx:id="field13" alignment="BOTTOM_CENTER" layoutX="320.0" layoutY="10.0" prefHeight="250.0" prefWidth="62.0" />
+                                    <VBox fx:id="field24" alignment="BOTTOM_CENTER" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" HBox.hgrow="NEVER" />
+                                    <VBox fx:id="field23" alignment="BOTTOM_CENTER" layoutX="10.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" HBox.hgrow="NEVER" />
+                                    <VBox fx:id="field22" alignment="BOTTOM_CENTER" layoutX="72.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" HBox.hgrow="NEVER" />
+                                    <VBox fx:id="field21" alignment="BOTTOM_CENTER" layoutX="10.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" HBox.hgrow="NEVER" />
+                                    <VBox fx:id="field20" alignment="BOTTOM_CENTER" layoutX="72.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" HBox.hgrow="NEVER" />
+                                    <VBox fx:id="field19" alignment="BOTTOM_CENTER" layoutX="134.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" HBox.hgrow="NEVER" />
+                                    <VBox fx:id="field18" alignment="BOTTOM_CENTER" layoutX="10.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" HBox.hgrow="NEVER" />
+                                    <VBox fx:id="field17" alignment="BOTTOM_CENTER" layoutX="72.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" HBox.hgrow="NEVER" />
+                                    <VBox fx:id="field16" alignment="BOTTOM_CENTER" layoutX="134.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" HBox.hgrow="NEVER" />
+                                    <VBox fx:id="field15" alignment="BOTTOM_CENTER" layoutX="196.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" HBox.hgrow="NEVER" />
+                                    <VBox fx:id="field14" alignment="BOTTOM_CENTER" layoutX="258.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" HBox.hgrow="NEVER" />
+                                    <VBox fx:id="field13" alignment="BOTTOM_CENTER" layoutX="320.0" layoutY="10.0" maxWidth="60.0" minWidth="60.0" prefHeight="250.0" prefWidth="60.0" HBox.hgrow="NEVER" />
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
                      </children>
                   </AnchorPane>
+                  <HBox prefHeight="50.0" prefWidth="720.0" />
                </children>
-               <padding>
-                  <Insets bottom="50.0" left="40.0" right="40.0" top="50.0" />
-               </padding>
             </VBox>
-            <VBox fx:id="vbRight" prefHeight="600.0" prefWidth="100.0" />
+            <VBox fx:id="vbLeft" prefHeight="600.0" prefWidth="70.0">
+               <padding>
+                  <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
+               </padding></VBox>
          </children>
       </HBox>
    </children>

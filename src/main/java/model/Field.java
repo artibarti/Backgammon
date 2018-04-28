@@ -1,42 +1,29 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Field
 {
     private int team;
+    private int id;
+    private int numberOfCheckers;
 
-    public Field()
+    public Field(int id)
     {
-        checkers = new ArrayList<>();
+        numberOfCheckers = 0;
+        this.id = id;
         team = -1;
     }
 
-    private List<Checker> checkers;
-
-    public List<Checker> getCheckers()
+    public void addCheckers(Player player, int count)
     {
-        return checkers;
-    }
-
-    public void addCheckers(int team, int count)
-    {
-        this.team = team;
-
-        for (int i = 0; i<count; i++)
-        {
-            checkers.add(new Checker(team));
-        }
+        this.team = player.getTeam();
+        numberOfCheckers += count;
     }
 
     public void deleteChecker(int count)
     {
-        for (int i = 0; i<count; i++)
-        {
-            if (checkers.size() != 0)
-                checkers.remove(checkers.size() - 1);
-        }
+        numberOfCheckers -= count;
+        if (numberOfCheckers <= 0)
+            team = -1;
     }
 
     public int getTeam()
@@ -44,4 +31,13 @@ public class Field
         return team;
     }
 
+    public int getNumberOfCheckers()
+    {
+        return numberOfCheckers;
+    }
+
+    public int getId()
+    {
+        return id;
+    }
 }

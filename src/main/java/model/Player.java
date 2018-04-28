@@ -2,12 +2,15 @@ package model;
 
 public class Player
 {
-    public Player(String name, int id)
+    public Player(int team)
     {
-        this.name = name;
-        this.id = id;
+        this.team = team;
     }
 
-    private String name;
-    private int id;
+    private int team;
+
+    public int getTeam()
+    {
+        return team;
+    }
 }
