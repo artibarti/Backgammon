@@ -13,9 +13,9 @@ public class Field
         team = -1;
     }
 
-    public void addCheckers(Player player, int count)
+    public void addCheckers(int player, int count)
     {
-        this.team = player.getTeam();
+        this.team = player;
         numberOfCheckers += count;
     }
 
@@ -24,6 +24,12 @@ public class Field
         numberOfCheckers -= count;
         if (numberOfCheckers <= 0)
             team = -1;
+    }
+
+    public void deleteCheckers()
+    {
+        numberOfCheckers = 0;
+        team = -1;
     }
 
     public int getTeam()

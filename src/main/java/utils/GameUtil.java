@@ -9,22 +9,20 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-import static java.lang.Math.abs;
-
 public class GameUtil
 {
 
     public static void initBoard(Board board, Player p1, Player p2)
     {
-        board.getFields().get(0).addCheckers(p1, 2);
-        board.getFields().get(5).addCheckers(p2, 5);
-        board.getFields().get(7).addCheckers(p2, 3);
-        board.getFields().get(11).addCheckers(p1, 5);
+        board.getFields().get(0).addCheckers(getPlayer1ID(), 2);
+        board.getFields().get(5).addCheckers(getPlayer2ID(), 5);
+        board.getFields().get(7).addCheckers(getPlayer2ID(), 3);
+        board.getFields().get(11).addCheckers(getPlayer1ID(), 5);
 
-        board.getFields().get(12).addCheckers(p2, 5);
-        board.getFields().get(16).addCheckers(p1, 3);
-        board.getFields().get(18).addCheckers(p1, 5);
-        board.getFields().get(23).addCheckers(p2, 2);
+        board.getFields().get(12).addCheckers(getPlayer2ID(), 5);
+        board.getFields().get(16).addCheckers(getPlayer1ID(), 3);
+        board.getFields().get(18).addCheckers(getPlayer1ID(), 5);
+        board.getFields().get(23).addCheckers(getPlayer2ID(), 2);
     }
 
     public static int getPlayer1ID()
@@ -37,77 +35,124 @@ public class GameUtil
         return 1;
     }
 
+    public static int getEnemyID(int player)
+    {
+        if (player == getPlayer1ID())
+            return getPlayer2ID();
+        if (player == getPlayer2ID())
+            return getPlayer1ID();
+        return -1;
+    }
+
     public static int generateDiceNumber()
     {
         return ThreadLocalRandom.current().nextInt(1, 7);
     }
 
-    public static void step(Board board, int from, int to, Player player)
+    public static void step(Board board, int from, int to, int player)
     {
-        board.getFields().get(from).deleteChecker(1);
-        board.getFields().get(to).addCheckers(player, 1);
+
+        if (from == 0 && player == getPlayer1ID())
+        {
+            board.minusKickedChecker(player);
+        }
+
+        else if (from == 25 && player == getPlayer2ID())
+        {
+            board.minusKickedChecker(player);
+        }
+        else
+        {
+            board.deleteChecker(from, 1);
+        }
+
+
+        if (board.getField(to).getTeam() != player)
+        {
+            if (board.getField(to).getNumberOfCheckers() != 0)
+            {
+                board.deleteCheckers(to);
+                board.addKickedChecker(getEnemyID(player));
+            }
+        }
+
+        board.addChecker(to, player);
     }
 
-    public static List<Integer> getFieldsCanStepFrom(Board board, Player player, List<Integer> dicenumbers)
+    public static List<Integer> canStepFrom(Board board, int from, int player, List<Integer> diceNumbers)
     {
-        return board.getFields().stream()
-                .filter(p -> p.getTeam() == player.getTeam())
-                .filter(p -> dicenumbers.stream().anyMatch
-                        (
-                                q -> (p.getId() + q <= 23
-                                        && board.getFields().get(p.getId() + q).getTeam() == getPlayer1ID()
-                                        && p.getTeam() == getPlayer1ID()
-                                        && board.getFields().get(p.getId() + q).getNumberOfCheckers() < 5) ||
-                                     (p.getId() + q <= 23
-                                        && board.getFields().get(p.getId() + q).getTeam() != getPlayer1ID()
-                                        && p.getTeam() == getPlayer1ID()
-                                        && board.getFields().get(p.getId() + q).getNumberOfCheckers() < 2) ||
-                                     (p.getId() - q >= 0
-                                        && board.getFields().get(p.getId() - q).getTeam() == getPlayer2ID()
-                                        && p.getTeam() == getPlayer2ID()
-                                        && board.getFields().get(p.getId() - q).getNumberOfCheckers() < 5) ||
-                                     (p.getId() - q >= 0
-                                        && board.getFields().get(p.getId() - q).getTeam() != getPlayer2ID()
-                                        && p.getTeam() == getPlayer2ID()
-                                        && board.getFields().get(p.getId() - q).getNumberOfCheckers() < 2)
+        if (board.getFields().get(from).getTeam() == player)
+        {
+            return getFieldsCanStepTo(board, player, from, diceNumbers);
+        }
 
-                        ))
+        return null;
+    }
+
+    public static List<Integer> getFieldsCanStepTo(Board board, int player, int from, List<Integer> dicenumbers)
+    {
+
+        if (player == getPlayer1ID())
+        {
+            return board.getFields().stream()
+                    .filter(p -> p.getId() > from)
+                    .filter(p -> dicenumbers.stream().anyMatch(q -> from + q == p.getId())
+                            && ((p.getTeam() == player && p.getNumberOfCheckers() < 5)
+                            || (p.getTeam() != player && p.getNumberOfCheckers() < 2)))
+                    .map(m -> m.getId())
+                    .collect(Collectors.toList());
+        }
+
+        if (player == getPlayer2ID())
+        {
+            return board.getFields().stream()
+                    .filter(p -> p.getId() < from)
+                    .filter(p -> dicenumbers.stream().anyMatch(q -> from - q == p.getId())
+                            && ((p.getTeam() == player && p.getNumberOfCheckers() < 5)
+                            || (p.getTeam() != player && p.getNumberOfCheckers() < 2)))
+                    .map(m -> m.getId())
+                    .collect(Collectors.toList());
+        }
+
+        return  null;
+    }
+
+    public static List<Integer> getFieldsCanStepFrom(Board board, int player)
+    {
+        if (board.getKickedCheckers(player) != 0)
+        {
+            List result = new ArrayList();
+
+            if (player == getPlayer1ID())
+            {
+                result.add(0);
+                return result;
+            }
+            if (player == getPlayer1ID())
+            {
+                result.add(25);
+                return result;
+            }
+        }
+
+        return board.getFields().stream()
+                .filter(p -> p.getTeam() == player)
                 .map(Field::getId)
                 .collect(Collectors.toList());
     }
 
-    public static List<Integer> getFieldsCanStepTo(Board board, Player player, int from, List<Integer> dicenumbers)
+    public static boolean canBearingOff(Board board, int player)
     {
-        System.out.println("number of fields can step to: " +
-                board.getFields().stream()
-                        .filter(
-                                p -> (p.getTeam() != player.getTeam() && p.getNumberOfCheckers() < 2) ||
-                                        (p.getTeam() == player.getTeam() && p.getNumberOfCheckers() < 5)
-                        )
-                        .filter(p -> ((p.getId() < from) && (p.getTeam() != 0)) || ((p.getId() > from) && (p.getTeam() != 1)))
-                        .map(m -> m.getId())
-                        .filter(p -> dicenumbers.stream().anyMatch(q -> q == abs(p - from)) )
-                        .collect(Collectors.toList()).size()
-        );
+        if (board.getKickedCheckers(player) != 0)
+            return false;
 
-        return board.getFields().stream()
-                .filter(
-                        p -> (p.getTeam() != player.getTeam() && p.getNumberOfCheckers() < 2) ||
-                                (p.getTeam() == player.getTeam() && p.getNumberOfCheckers() < 5)
-                        )
-                .filter(p -> ((p.getId() < from) && (p.getTeam() != 0)) || ((p.getId() > from) && (p.getTeam() != 1)))
-                .map(m -> m.getId())
-                .filter(p -> dicenumbers.stream().anyMatch(q -> q == abs(p - from)) )
-                .collect(Collectors.toList());
+        if ((player == getPlayer1ID() && (board.getFields().stream().filter(p -> p.getId() < 18).anyMatch(p -> p.getTeam() == player)))
+                || player == getPlayer2ID() && board.getFields().stream().filter(p -> p.getId() > 5).anyMatch(p -> p.getTeam() == player))
+        {
+                return false;
+        }
+
+        return true;
     }
 
-    public static String getColorForDices(Player player)
-    {
-        if (player.getTeam() == getPlayer1ID())
-            return "white";
-        if (player.getTeam() == getPlayer2ID())
-            return "black";
-
-        return null;
-    }
 }

@@ -1,24 +1,26 @@
 package model;
 
-import model.Player;
 import utils.GameUtil;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Turn
 {
 
-    private int from;
-    private Player player;
-    private List<Integer> diceNumbers;
+    public enum Mode{ SELECT_FROM, SELECT_TO };
 
-    public Turn(Player player)
+    private Mode mode;
+    private int from;
+    private int player;
+    private List<Integer> diceNumbers;
+    private List<Integer> choosableFields;
+
+    public Turn(int player, Board board)
     {
+        mode = Mode.SELECT_FROM;
+        choosableFields = new ArrayList<>();
         this.player = player;
         initDiceNumbers();
-        nextStep();
     }
 
     public int getStepsLeft()
@@ -26,12 +28,7 @@ public class Turn
         return diceNumbers.size();
     }
 
-    public List<Integer> getSteps()
-    {
-        return diceNumbers;
-    }
-
-    public Player getPlayer()
+    public int getPlayer()
     {
         return player;
     }
@@ -39,6 +36,7 @@ public class Turn
     public void setFrom(int from)
     {
         this.from = from;
+        mode = Mode.SELECT_TO;
     }
 
     public int getFrom()
@@ -49,11 +47,6 @@ public class Turn
     public List<Integer> getDiceNumbers()
     {
         return diceNumbers;
-    }
-
-    public void nextStep()
-    {
-        from = -1;
     }
 
     public void removeStep(int step)
@@ -80,6 +73,27 @@ public class Turn
             diceNumbers.add(diceNumbers.get(1));
         }
     }
+
+    public List<Integer> getChoosableFields()
+    {
+        return choosableFields;
+    }
+
+    public void setChoosableFields(List<Integer> choosableFields)
+    {
+        this.choosableFields = choosableFields;
+    }
+
+    public Mode getMode()
+    {
+        return mode;
+    }
+
+    public void setMode(Mode mode)
+    {
+        this.mode = mode;
+    }
+
 
 }
 

@@ -4,6 +4,7 @@ package controller;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -12,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import model.Board;
 import model.Player;
+import utils.DesignManager;
 import utils.GameUtil;
 import model.Turn;
 
@@ -20,8 +22,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.min;
 
 public class BoardController
 {
@@ -35,21 +39,21 @@ public class BoardController
     private Pane dice1, dice2, dice3, dice4;
 
     @FXML
-    private HBox hbRightPlayer1, hbRightPlayer2;
+    private HBox hbplayer1BorneCheckers, hbplayer2BorneCheckers, hbplayer1KickedCheckers, hbplayer2KickedCheckers;
 
     @FXML
-    private VBox dicePanel;
+    Label player1KickedCheckersCount, player2KickedCheckersCount, player1BorneCheckersCount, player2BorneCheckersCount;
 
     private MainController mainController;
 
     private Board board;
     private Player player1;
     private Player player2;
-    private List<VBox> fields;
+    private List<Pane> fields;
     private List<Pane> dices;
     private Turn currentTurn;
     private int selectedFieldID;
-    private Map<Integer, String> highlightsForFields;
+    private DesignManager designManager;
 
     public void setMainController(MainController mainController)
     {
@@ -60,6 +64,75 @@ public class BoardController
     private void initialize()
     {
         fields = new ArrayList<>();
+        dices = new ArrayList<>();
+
+        dices.add(dice1);
+        dices.add(dice2);
+        dices.add(dice3);
+        dices.add(dice4);
+
+        designManager = new DesignManager();
+
+        player1 = new Player(GameUtil.getPlayer1ID());
+        player2 = new Player(GameUtil.getPlayer2ID());
+        board = new Board();
+
+        GameUtil.initBoard(board, player1, player2);
+        nextTurn();
+    }
+
+    public void nextTurn()
+    {
+        if (currentTurn == null)
+        {
+            currentTurn = new Turn(GameUtil.getPlayer1ID(), board);
+            initFields();
+            refresh();
+        }
+        else if (currentTurn.getPlayer() == player1.getTeam())
+        {
+            currentTurn = new Turn(GameUtil.getPlayer2ID(), board);
+            initFields();
+        }
+        else if (currentTurn.getPlayer() == player2.getTeam())
+        {
+            currentTurn = new Turn(GameUtil.getPlayer1ID(), board);
+            initFields();
+        }
+
+
+        switch (currentTurn.getMode())
+        {
+            case SELECT_FROM:
+                currentTurn.setChoosableFields(GameUtil.getFieldsCanStepFrom(board, currentTurn.getPlayer()));
+                break;
+            case SELECT_TO:
+                currentTurn.setChoosableFields(GameUtil.getFieldsCanStepTo(board, currentTurn.getPlayer(),
+                        currentTurn.getFrom(), currentTurn.getDiceNumbers()));
+                designManager.setStyle("from", fields.get(currentTurn.getFrom()), getHighlighForField(currentTurn.getFrom()));
+                break;
+        }
+
+        if (currentTurn.getChoosableFields().size() != 0)
+        {
+            selectedFieldID = currentTurn.getChoosableFields().get(0);
+            designManager.setStyle("selection", fields.get(selectedFieldID), getHighlighForField(selectedFieldID));
+        }
+        else
+        {
+            nextTurn();
+        }
+    }
+
+
+    public void initFields()
+    {
+        fields.clear();
+
+        if (currentTurn.getPlayer() == GameUtil.getPlayer1ID())
+            fields.add(hbplayer1KickedCheckers);
+        if (currentTurn.getPlayer() == GameUtil.getPlayer2ID())
+            fields.add(hbplayer2BorneCheckers);
 
         fields.add(field1);
         fields.add(field2);
@@ -86,184 +159,134 @@ public class BoardController
         fields.add(field23);
         fields.add(field24);
 
-        dices = new ArrayList<>();
+        if (currentTurn.getPlayer() == GameUtil.getPlayer1ID())
+            fields.add(hbplayer1BorneCheckers);
+        if (currentTurn.getPlayer() == GameUtil.getPlayer2ID())
+            fields.add(hbplayer2KickedCheckers);
 
-        dices.add(dice1);
-        dices.add(dice2);
-        dices.add(dice3);
-        dices.add(dice4);
-
-        highlightsForFields = new HashMap<>();
-
-        highlightsForFields.put(0, "selectedField_upperFields");
-        highlightsForFields.put(1, "selectedField_upperFields");
-        highlightsForFields.put(2, "selectedField_upperFields");
-        highlightsForFields.put(3, "selectedField_upperFields");
-        highlightsForFields.put(4, "selectedField_upperFields");
-        highlightsForFields.put(5, "selectedField_upperFields");
-        highlightsForFields.put(6, "selectedField_upperFields");
-        highlightsForFields.put(7, "selectedField_upperFields");
-        highlightsForFields.put(8, "selectedField_upperFields");
-        highlightsForFields.put(9, "selectedField_upperFields");
-        highlightsForFields.put(10, "selectedField_upperFields");
-        highlightsForFields.put(11, "selectedField_upperFields");
-        highlightsForFields.put(12, "selectedField_lowerFields");
-        highlightsForFields.put(13, "selectedField_lowerFields");
-        highlightsForFields.put(14, "selectedField_lowerFields");
-        highlightsForFields.put(15, "selectedField_lowerFields");
-        highlightsForFields.put(16, "selectedField_lowerFields");
-        highlightsForFields.put(17, "selectedField_lowerFields");
-        highlightsForFields.put(18, "selectedField_lowerFields");
-        highlightsForFields.put(19, "selectedField_lowerFields");
-        highlightsForFields.put(20, "selectedField_lowerFields");
-        highlightsForFields.put(21, "selectedField_lowerFields");
-        highlightsForFields.put(22, "selectedField_lowerFields");
-        highlightsForFields.put(23, "selectedField_lowerFields");
-
-        player1 = new Player(0);
-        player2 = new Player(1);
-        board = new Board();
-
-        GameUtil.initBoard(board, player1, player2);
-        nextTurn();
-    }
-
-    public void nextTurn()
-    {
-
-        if (currentTurn == null)
-        {
-            currentTurn = new Turn(player1);
-            selectedFieldID = 0;
-        }
-        else if (currentTurn.getPlayer().getTeam() == player1.getTeam())
-        {
-            currentTurn = new Turn(player2);
-            selectedFieldID = 0;
-        }
-        else if (currentTurn.getPlayer().getTeam() == player2.getTeam())
-        {
-            currentTurn = new Turn(player1);
-            selectedFieldID = 23;
-        }
-
-        refresh(true, 0);
-    }
-
-    public void nextStep()
-    {
-        if (currentTurn.getStepsLeft() == 0)
-        {
-            nextTurn();
-        }
-        else
-        {
-            currentTurn.nextStep();
-        }
     }
 
     public void setKeyboardEventHandler()
     {
-        apBoard.getScene().addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>()
+        apBoard.getScene().addEventFilter(KeyEvent.KEY_PRESSED, keyEvent ->
         {
-            public void handle(KeyEvent keyEvent)
+
+            selectedFieldID = getNextSelectedFieldID(keyEvent.getCode());
+            designManager.setStyle("selection", fields.get(selectedFieldID), getHighlighForField(selectedFieldID));
+
+            if (keyEvent.getCode() == KeyCode.ENTER)
             {
-                int oldSelectedFieldID = selectedFieldID;
-                boolean shouldRefreshEverything = false;
-
-                if (keyEvent.getCode() == KeyCode.UP)
+                if (currentTurn.getMode() == Turn.Mode.SELECT_FROM)
                 {
-                    selectedFieldID = 23 - selectedFieldID;
-                }
-                if (keyEvent.getCode() == KeyCode.DOWN)
-                {
-                    selectedFieldID = 23 - selectedFieldID;
-                }
-                if (keyEvent.getCode() == KeyCode.RIGHT)
-                {
-                    if (selectedFieldID < 11)
-                    {
-                        selectedFieldID = selectedFieldID + 1;
-                    }
-                    if (selectedFieldID > 12)
-                    {
-                        selectedFieldID = selectedFieldID - 1;
-                    }
-                }
-                if (keyEvent.getCode() == KeyCode.LEFT)
-                {
-                    if (selectedFieldID > 0 && selectedFieldID <= 11)
-                    {
-                        selectedFieldID = selectedFieldID - 1;
-                    }
-                    if (selectedFieldID < 23 && selectedFieldID >= 12)
-                    {
-                        selectedFieldID = selectedFieldID + 1;
-                    }
-                }
-                if (keyEvent.getCode() == KeyCode.ENTER)
-                {
-
-                    if (currentTurn.getFrom() == -1 && GameUtil.getFieldsCanStepFrom(board, currentTurn.getPlayer(),
-                            currentTurn.getDiceNumbers()).stream().anyMatch(p -> p == selectedFieldID))
+                    if (currentTurn.getChoosableFields().stream().anyMatch(p -> p == selectedFieldID))
                     {
                         currentTurn.setFrom(selectedFieldID);
+                        currentTurn.setMode(Turn.Mode.SELECT_TO);
+                        currentTurn.setChoosableFields(GameUtil.getFieldsCanStepTo(board, currentTurn.getPlayer(), selectedFieldID, currentTurn.getDiceNumbers()));
+                        designManager.setStyle("from", fields.get(selectedFieldID), getHighlighForField(selectedFieldID));
                     }
 
-                    else if (currentTurn.getFrom() != -1)
-                    {
-                        if (GameUtil.getFieldsCanStepTo(board, currentTurn.getPlayer(), currentTurn.getFrom(),
-                                currentTurn.getDiceNumbers()).stream().anyMatch(p -> p == selectedFieldID))
-                        {
-                            GameUtil.step(board, currentTurn.getFrom(), selectedFieldID, currentTurn.getPlayer());
-                            currentTurn.removeStep(abs(currentTurn.getFrom() - selectedFieldID));
-                            currentTurn.nextStep();
-                            nextStep();
-                            shouldRefreshEverything = true;
-                        }
-                    }
                 }
 
-                refresh(shouldRefreshEverything, oldSelectedFieldID);
+                else if (currentTurn.getMode() == Turn.Mode.SELECT_TO)
+                {
+                    if (selectedFieldID == currentTurn.getFrom())
+                    {
+                        currentTurn.setMode(Turn.Mode.SELECT_FROM);
+                        designManager.dropStyle("from");
+                        currentTurn.setChoosableFields(GameUtil.getFieldsCanStepFrom(board, currentTurn.getPlayer()));
+                    }
 
+                    else if (currentTurn.getChoosableFields().stream().anyMatch(p -> p == selectedFieldID))
+                    {
+                        GameUtil.step(board, currentTurn.getFrom(), selectedFieldID, currentTurn.getPlayer());
+                        currentTurn.removeStep(abs(currentTurn.getFrom() - selectedFieldID));
+                        designManager.dropStyle("from");
+                        if (currentTurn.getStepsLeft() == 0)
+                        {
+                            nextTurn();
+                        }
+                        else
+                        {
+                            currentTurn.setMode(Turn.Mode.SELECT_FROM);
+                            currentTurn.setChoosableFields(GameUtil.getFieldsCanStepFrom(board, currentTurn.getPlayer()));
+
+                            if (currentTurn.getChoosableFields().size() != 0)
+                            {
+                                selectedFieldID = currentTurn.getChoosableFields().get(0);
+                                designManager.setStyle("selection", fields.get(selectedFieldID), getHighlighForField(selectedFieldID));
+                            }
+                            else
+                            {
+                                nextTurn();
+                            }
+                        }
+                    }
+
+                    refresh();
+                }
             }
         });
     }
 
-    public void refresh(boolean shouldRefreshEerything, int oldSelectedFieldID)
+    public void refresh()
+    {
+        drawBoard();
+        refreshDices();
+    }
+
+
+    public int getNextSelectedFieldID(KeyCode keyCode)
     {
 
-        fields.get(oldSelectedFieldID).getStyleClass().clear();
-        fields.get(selectedFieldID).getStyleClass().add(highlightsForFields.get(selectedFieldID));
-
-        if (currentTurn.getFrom() != -1)
+        if (keyCode == KeyCode.UP || keyCode == KeyCode.W)
         {
-            fields.get(currentTurn.getFrom()).getStyleClass().clear();
-            fields.get(currentTurn.getFrom()).getStyleClass().add("selectedField");
+            return 25 - selectedFieldID;
+        }
+        if (keyCode == KeyCode.DOWN || keyCode == KeyCode.S)
+        {
+            return 25 - selectedFieldID;
+        }
+        if (keyCode == KeyCode.RIGHT || keyCode == KeyCode.D)
+        {
+            if (selectedFieldID < 12)
+            {
+                selectedFieldID = selectedFieldID + 1;
+            }
+            if (selectedFieldID > 13)
+            {
+                selectedFieldID = selectedFieldID - 1;
+            }
+        }
+        if (keyCode == KeyCode.LEFT || keyCode == KeyCode.A)
+        {
+            if (selectedFieldID > 0 && selectedFieldID <= 12)
+            {
+                selectedFieldID = selectedFieldID - 1;
+            }
+            if (selectedFieldID < 25 && selectedFieldID >= 13)
+            {
+                selectedFieldID = selectedFieldID + 1;
+            }
         }
 
-        if (!shouldRefreshEerything)
-        {
-            return;
-        }
-
-        drawBoard();
-
-        dices.stream().forEach(d -> d.getStyleClass().clear());
-
-        for (int i = 0; i<currentTurn.getDiceNumbers().size(); i++)
-        {
-            dices.get(i).getStyleClass().add("dice" + Integer.toString(currentTurn.getDiceNumbers().get(i))
-                    + "_" + GameUtil.getColorForDices(currentTurn.getPlayer()));
-        }
+        return selectedFieldID;
     }
 
     public void drawBoard()
     {
-        fields.stream().forEach(p -> p.getChildren().clear());
-        board.getFields().stream()
-                .forEach(p -> {addCheckers(p.getId(), p.getTeam(), p.getNumberOfCheckers());});
+        fields.stream()
+                .filter(p -> !p.equals(hbplayer1BorneCheckers) && !p.equals(hbplayer2BorneCheckers)
+                        && !p.equals(hbplayer1KickedCheckers) && !p.equals(hbplayer2KickedCheckers))
+                .forEach(p -> p.getChildren().clear());
 
+        board.getFields().stream()
+                .forEach(p -> addCheckers(p.getId(), p.getTeam(), p.getNumberOfCheckers()));
+
+        player1BorneCheckersCount.setText(Integer.toString(board.getBorneCheckers(GameUtil.getPlayer1ID())));
+        player2BorneCheckersCount.setText(Integer.toString(board.getBorneCheckers(GameUtil.getPlayer2ID())));
+        player1KickedCheckersCount.setText(Integer.toString(board.getKickedCheckers(GameUtil.getPlayer1ID())));
+        player2KickedCheckersCount.setText(Integer.toString(board.getKickedCheckers(GameUtil.getPlayer2ID())));
     }
 
     void addCheckers(int fieldID, int team, int count)
@@ -272,7 +295,7 @@ public class BoardController
         {
             FXMLLoader fxmlLoader = new FXMLLoader();
 
-            for (int i = 0; i<count; i++)
+            for (int i = 0; i < count; i++)
             {
                 AnchorPane apChecker = fxmlLoader.load(getClass().getResource("/view/checker.fxml"));
                 apChecker.getStylesheets().clear();
@@ -288,6 +311,46 @@ public class BoardController
         {
             e.printStackTrace();
         }
+    }
+
+
+    public void refreshDices()
+    {
+        dices.stream().forEach(d -> d.getStyleClass().clear());
+
+        for (int i = 0; i < currentTurn.getDiceNumbers().size(); i++)
+        {
+            dices.get(i).getStyleClass().add("dice" + Integer.toString(currentTurn.getDiceNumbers().get(i))
+                    + "_" + getColorForDices());
+        }
+    }
+
+    public String getColorForDices()
+    {
+        if (currentTurn.getPlayer() == GameUtil.getPlayer1ID())
+            return "white";
+        if (currentTurn.getPlayer() == GameUtil.getPlayer2ID())
+            return "black";
+
+        return null;
+    }
+
+    public String getHighlighForField(int fieldID)
+    {
+        if (fieldID == 0 || fieldID == 25)
+        {
+            return "selection_for_kicked_and_borne_fields";
+        }
+        if (fieldID >= 1 && fieldID <= 12)
+        {
+            return "selection_for_upper_fields";
+        }
+        if (fieldID >= 13 && fieldID <= 24)
+        {
+            return "selection_for_lower_fields";
+        }
+
+        return null;
     }
 
 }
