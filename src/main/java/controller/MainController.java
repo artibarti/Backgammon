@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
@@ -16,6 +17,7 @@ public class MainController
     MenuController menuController;
     BoardController boardController;
     HelpController helpController;
+    ControlsController controlsController;
 
     @FXML
     private void initialize()
@@ -59,6 +61,24 @@ public class MainController
         }
     }
 
+    public void showControls()
+    {
+        try
+        {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/view/controls.fxml"));
+            AnchorPane apHelp = (AnchorPane) fxmlLoader.load();
+            apMain.getChildren().clear();
+            apMain.getChildren().add(apHelp);
+            controlsController = fxmlLoader.getController();
+            controlsController.setMainController(this);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     public void showBoard()
     {
         try
@@ -78,5 +98,10 @@ public class MainController
         {
             e.printStackTrace();
         }
+    }
+
+    public void exit()
+    {
+        Platform.exit();
     }
 }

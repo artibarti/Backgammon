@@ -184,3 +184,10 @@
         -fx-background-size: 60 50;
         -fx-background-position: center center;
 }
+
+#apControls{
+        -fx-background-image: url("/resources/pictures/controls.png");
+        -fx-background-repeat: no-repeat;
+        -fx-background-size: 1000 600;
+        -fx-background-position: center center;
+}

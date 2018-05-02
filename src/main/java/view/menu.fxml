@@ -11,6 +11,7 @@
          <children>
             <Button fx:id="btnStartNew" mnemonicParsing="false" text="Start New" />
             <Button fx:id="btnOptions" mnemonicParsing="false" text="Options" />
+            <Button fx:id="btnControls" layoutX="466.0" layoutY="251.0" mnemonicParsing="false" text="Controls" />
             <Button fx:id="btnRankings" mnemonicParsing="false" text="Rankings" />
             <Button fx:id="btnHelp" mnemonicParsing="false" text="Help" />
             <Button fx:id="btnExit" mnemonicParsing="false" text="Exit" />

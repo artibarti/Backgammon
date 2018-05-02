@@ -16,6 +16,9 @@ public class MenuController
     private Button btnOptions;
 
     @FXML
+    private Button btnControls;
+
+    @FXML
     private Button btnRankings;
 
     @FXML
@@ -33,6 +36,7 @@ public class MenuController
     {
         btnStartNew.setOnAction(this::btnStartNewClicked);
         btnOptions.setOnAction(this::btnOptionsClicked);
+        btnControls.setOnAction(this::btnControlsClicked);
         btnRankings.setOnAction(this::btnRankingsClicked);
         btnHelp.setOnAction(this::btnHelpClicked);
         btnExit.setOnAction(this::btnExitClicked);
@@ -58,9 +62,14 @@ public class MenuController
         mainController.showHelp();
     }
 
+    private void btnControlsClicked(ActionEvent event)
+    {
+        mainController.showControls();
+    }
+
     private void btnExitClicked(ActionEvent event)
     {
-
+        mainController.exit();
     }
 
     public void setMainController(MainController mainController)
