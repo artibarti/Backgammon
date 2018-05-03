@@ -2,17 +2,29 @@ package model;
 
 import utils.GameUtil;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 
+@XmlRootElement
 public class Board
 {
 
     private List<Field> fields;
 
+    @XmlAttribute
     private int player1KickedCheckers = 0;
+
+    @XmlAttribute
     private int player2KickedCheckers = 0;
+
+    @XmlAttribute
     private int player1BorneCheckers = 0;
+
+    @XmlAttribute
     private int player2BorneCheckers = 0;
 
     public Board()
@@ -27,6 +39,8 @@ public class Board
         }
     }
 
+    @XmlElementWrapper(name="fields")
+    @XmlElement(name="field", type=Field.class)
     public List<Field> getFields() {
         return fields;
     }

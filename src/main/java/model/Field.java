@@ -1,5 +1,7 @@
 package model;
 
+import javax.xml.bind.annotation.XmlElement;
+
 public class Field
 {
     private int team;
@@ -32,16 +34,19 @@ public class Field
         team = -1;
     }
 
+    @XmlElement(name = "team")
     public int getTeam()
     {
         return team;
     }
 
+    @XmlElement(name = "numberOfCheckers")
     public int getNumberOfCheckers()
     {
         return numberOfCheckers;
     }
 
+    @XmlElement(name = "id")
     public int getId()
     {
         return id;

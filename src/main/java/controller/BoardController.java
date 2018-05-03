@@ -14,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import model.Board;
 import model.Player;
+import service.XMLHandler;
 import utils.DesignManager;
 import utils.GameUtil;
 import model.Turn;
@@ -79,6 +80,8 @@ public class BoardController
         board = new Board();
 
         GameUtil.initBoard(board, player1, player2);
+        XMLHandler.writeXML(board, 0);
+
         nextTurn();
     }
 
