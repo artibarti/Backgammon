@@ -4,6 +4,7 @@ package controller;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -86,32 +87,22 @@ public class BoardController
         if (currentTurn == null)
         {
             currentTurn = new Turn(GameUtil.getPlayer1ID(), board);
-            initFields();
+            initBases();
             refresh();
         }
         else if (currentTurn.getPlayer() == player1.getTeam())
         {
             currentTurn = new Turn(GameUtil.getPlayer2ID(), board);
-            initFields();
+            initBases();
         }
         else if (currentTurn.getPlayer() == player2.getTeam())
         {
             currentTurn = new Turn(GameUtil.getPlayer1ID(), board);
-            initFields();
+            initBases();
         }
 
 
-        switch (currentTurn.getMode())
-        {
-            case SELECT_FROM:
-                currentTurn.setChoosableFields(GameUtil.getFieldsCanStepFrom(board, currentTurn.getPlayer()));
-                break;
-            case SELECT_TO:
-                currentTurn.setChoosableFields(GameUtil.getFieldsCanStepTo(board, currentTurn.getPlayer(),
-                        currentTurn.getFrom(), currentTurn.getDiceNumbers()));
-                designManager.setStyle("from", fields.get(currentTurn.getFrom()), getHighlighForField(currentTurn.getFrom()));
-                break;
-        }
+        currentTurn.setChoosableFields(GameUtil.getFieldsCanStepFrom(board, currentTurn.getPlayer(), currentTurn.getDiceNumbers()));
 
         if (currentTurn.getChoosableFields().size() != 0)
         {
@@ -125,7 +116,7 @@ public class BoardController
     }
 
 
-    public void initFields()
+    public void initBases()
     {
         fields.clear();
 
@@ -194,12 +185,14 @@ public class BoardController
                     {
                         currentTurn.setMode(Turn.Mode.SELECT_FROM);
                         designManager.dropStyle("from");
-                        currentTurn.setChoosableFields(GameUtil.getFieldsCanStepFrom(board, currentTurn.getPlayer()));
+                        currentTurn.setChoosableFields(GameUtil.getFieldsCanStepFrom(board, currentTurn.getPlayer(), currentTurn.getDiceNumbers()));
                     }
 
                     else if (currentTurn.getChoosableFields().stream().anyMatch(p -> p == selectedFieldID))
                     {
-                        GameUtil.step(board, currentTurn.getFrom(), selectedFieldID, currentTurn.getPlayer());
+                        if (GameUtil.step(board, currentTurn.getFrom(), selectedFieldID, currentTurn.getPlayer()) == GameUtil.WINNER_STEP)
+                            endGame();
+
                         currentTurn.removeStep(abs(currentTurn.getFrom() - selectedFieldID));
                         designManager.dropStyle("from");
                         if (currentTurn.getStepsLeft() == 0)
@@ -209,7 +202,7 @@ public class BoardController
                         else
                         {
                             currentTurn.setMode(Turn.Mode.SELECT_FROM);
-                            currentTurn.setChoosableFields(GameUtil.getFieldsCanStepFrom(board, currentTurn.getPlayer()));
+                            currentTurn.setChoosableFields(GameUtil.getFieldsCanStepFrom(board, currentTurn.getPlayer(), currentTurn.getDiceNumbers()));
 
                             if (currentTurn.getChoosableFields().size() != 0)
                             {
@@ -353,4 +346,15 @@ public class BoardController
         return null;
     }
 
+
+    public void endGame()
+    {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("The match is over!");
+        alert.setHeaderText(null);
+        alert.setContentText("Player" + currentTurn.getPlayer() + 1 + " is the winner!");
+
+        alert.showAndWait();
+        mainController.showMenu();
+    }
 }

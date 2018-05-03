@@ -12,6 +12,9 @@ import java.util.stream.Collectors;
 public class GameUtil
 {
 
+    public static int NATURAL_STEP = 0;
+    public static int WINNER_STEP = 1;
+
     public static void initBoard(Board board, Player p1, Player p2)
     {
         board.getFields().get(0).addCheckers(getPlayer1ID(), 2);
@@ -49,13 +52,17 @@ public class GameUtil
         return ThreadLocalRandom.current().nextInt(1, 7);
     }
 
-    public static void step(Board board, int from, int to, int player)
+    public static int step(Board board, int from, int to, int player)
     {
         if (to == 25 && player == getPlayer1ID() || to == 0 && player == getPlayer2ID())
         {
             board.addBorneChecker(player);
             board.deleteChecker(from, 1);
-            return;
+
+            if (isWinner(board, player))
+                return WINNER_STEP;
+            else
+                return NATURAL_STEP;
         }
 
         if (from == 0 && player == getPlayer1ID() || from == 25 && player == getPlayer2ID())
@@ -78,16 +85,12 @@ public class GameUtil
         }
 
         board.addChecker(to, player);
-    }
 
-    public static List<Integer> canStepFrom(Board board, int from, int player, List<Integer> diceNumbers)
-    {
-        if (board.getFields().get(from).getTeam() == player)
-        {
-            return getFieldsCanStepTo(board, player, from, diceNumbers);
-        }
+        if (isWinner(board, player))
+            return WINNER_STEP;
+        else
+            return NATURAL_STEP;
 
-        return null;
     }
 
     public static List<Integer> getFieldsCanStepTo(Board board, int player, int from, List<Integer> dicenumbers)
@@ -131,28 +134,52 @@ public class GameUtil
         return result;
     }
 
-    public static List<Integer> getFieldsCanStepFrom(Board board, int player)
+    public static List<Integer> getFieldsCanStepFrom(Board board, int player, List<Integer> dicenumbers)
     {
+
+        List<Integer> result = new ArrayList();
+
         if (board.getKickedCheckers(player) != 0)
         {
-            List result = new ArrayList();
-
             if (player == getPlayer1ID())
             {
                 result.add(0);
-                return result;
+
+                if(getFieldsCanStepTo(board,player,0, dicenumbers).size() != 0)
+                    return result;
+                else
+                {
+                    result.clear();
+                    return result;
+                }
             }
-            if (player == getPlayer1ID())
+            if (player == getPlayer2ID())
             {
                 result.add(25);
-                return result;
+
+                if(getFieldsCanStepTo(board,player,25, dicenumbers).size() != 0)
+                    return result;
+                else
+                {
+                    result.clear();
+                    return result;
+                }
             }
         }
 
-        return board.getFields().stream()
+        result = board.getFields().stream()
                 .filter(p -> p.getTeam() == player)
                 .map(Field::getId)
                 .collect(Collectors.toList());
+
+        for (int i = 0; i<result.size(); i++)
+        {
+            if (getFieldsCanStepTo(board, player, result.get(i), dicenumbers).size() != 0)
+                return result;
+        }
+
+        result.clear();
+        return result;
     }
 
     public static boolean canBearingOff(Board board, int player)
@@ -169,4 +196,19 @@ public class GameUtil
         return true;
     }
 
+
+    public static boolean isWinner(Board board, int player)
+    {
+        if (board.getFields().stream().anyMatch(p -> p.getTeam() == player) == true)
+        {
+            return false;
+        }
+
+        if (board.getKickedCheckers(player) != 0)
+        {
+            return false;
+        }
+
+        return true;
+    }
 }

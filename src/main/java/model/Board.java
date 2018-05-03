@@ -47,7 +47,7 @@ public class Board
         if (player == GameUtil.getPlayer1ID())
             return player1BorneCheckers;
 
-        if (player == GameUtil.getPlayer1ID())
+        if (player == GameUtil.getPlayer2ID())
             return player2BorneCheckers;
 
         return 0;

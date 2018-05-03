@@ -8,6 +8,23 @@
     <artifactId>art</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <developers>
+        <developer>
+            <name>Artúr Sáfrány</name>
+            <email>safranyartur1995@gmail.com</email>
+        </developer>
+    </developers>
+
+    <description>
+        This is a multiplayer JavaFX based backgammon game.
+    </description>
+
+    <scm>
+        <url>https://github.com/artibarti/Backgammon</url>
+    </scm>
+
+
+
     <dependencies>
         <dependency>
             <groupId>com.oracle.jdbc</groupId>
@@ -18,6 +35,11 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <version>1.0.2</version>
         </dependency>
     </dependencies>
 
@@ -59,6 +81,33 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M1</version>
+                <executions>
+                    <execution>
+                        <id>enforce-java</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <phase>validate</phase>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>1.8.0</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.0.0</version>
             </plugin>
         </plugins>
     </build>
