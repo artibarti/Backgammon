@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="false" debug="false">
+
+    <timestamp key="timestamp" datePattern="yyyy_MM_dd'_'HHmmss"/>
+
+    <appender name="FILE1"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>Logs/log-${timestamp}.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>/archived/debug.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+
+    </appender>
+
+    <logger name="com.mkyong.web" level="debug"
+            additivity="false">
+        <appender-ref ref="FILE1" />
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="FILE1" />
+    </root>
+</configuration>

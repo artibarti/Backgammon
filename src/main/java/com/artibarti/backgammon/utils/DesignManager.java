@@ -1,9 +1,12 @@
-package utils;
+package com.artibarti.backgammon.utils;
 
 import javafx.scene.Node;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Helper class to keep selections and design patterns organized
+ */
 public class DesignManager
 {
     private class Element

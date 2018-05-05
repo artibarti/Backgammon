@@ -1,10 +1,11 @@
-package controller;
+package com.artibarti.backgammon.controller;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -14,6 +15,8 @@ public class MainController
     @FXML
     AnchorPane apMain;
 
+    private static Logger logger = LoggerFactory.getLogger(MainController.class);
+
     MenuController menuController;
     BoardController boardController;
     HelpController helpController;
@@ -22,11 +25,14 @@ public class MainController
     @FXML
     private void initialize()
     {
+        logger.info("enter initialize");
         showMenu();
     }
 
     public void showMenu()
     {
+        logger.info("enter showMenu");
+
         try
         {
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -39,12 +45,15 @@ public class MainController
         }
         catch (IOException e)
         {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
     }
 
     public void showHelp()
     {
+        logger.info("enter showHelp");
+
         try
         {
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -57,12 +66,15 @@ public class MainController
         }
         catch (IOException e)
         {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
     }
 
     public void showControls()
     {
+        logger.info("enter showControls");
+
         try
         {
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -75,12 +87,16 @@ public class MainController
         }
         catch (IOException e)
         {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
+
     }
 
     public void showBoard()
     {
+        logger.info("enter showBoard");
+
         try
         {
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -92,16 +108,21 @@ public class MainController
             apMain.getChildren().clear();
             apMain.getChildren().add(apBoard);
             boardController.setKeyboardEventHandler();
+            boardController.start();
 
         }
         catch (IOException e)
         {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
+
     }
 
     public void exit()
     {
+        logger.info("enter exit");
+        logger.info("exit application...");
         Platform.exit();
     }
 }

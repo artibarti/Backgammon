@@ -1,8 +1,7 @@
-package utils;
+package com.artibarti.backgammon.utils;
 
-import model.Board;
-import model.Field;
-import model.Player;
+import com.artibarti.backgammon.model.Board;
+import com.artibarti.backgammon.model.Field;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,38 +11,30 @@ import java.util.stream.Collectors;
 public class GameUtil
 {
 
-    public static int NATURAL_STEP = 0;
-    public static int WINNER_STEP = 1;
+    public static final int NATURAL_STEP = 0;
+    public static final int WINNER_STEP = 1;
+    public static final int Player1ID = 0;
+    public static final int Player2ID = 1;
 
-    public static void initBoard(Board board, Player p1, Player p2)
+    public static void initBoard(Board board)
     {
-        board.getFields().get(0).addCheckers(getPlayer1ID(), 2);
-        board.getFields().get(5).addCheckers(getPlayer2ID(), 5);
-        board.getFields().get(7).addCheckers(getPlayer2ID(), 3);
-        board.getFields().get(11).addCheckers(getPlayer1ID(), 5);
+        board.getFields().get(0).addCheckers(Player1ID, 2);
+        board.getFields().get(5).addCheckers(Player2ID, 5);
+        board.getFields().get(7).addCheckers(Player2ID, 3);
+        board.getFields().get(11).addCheckers(Player1ID, 5);
 
-        board.getFields().get(12).addCheckers(getPlayer2ID(), 5);
-        board.getFields().get(16).addCheckers(getPlayer1ID(), 3);
-        board.getFields().get(18).addCheckers(getPlayer1ID(), 5);
-        board.getFields().get(23).addCheckers(getPlayer2ID(), 2);
-    }
-
-    public static int getPlayer1ID()
-    {
-        return 0;
-    }
-
-    public static int getPlayer2ID()
-    {
-        return 1;
+        board.getFields().get(12).addCheckers(Player2ID, 5);
+        board.getFields().get(16).addCheckers(Player1ID, 3);
+        board.getFields().get(18).addCheckers(Player1ID, 5);
+        board.getFields().get(23).addCheckers(Player2ID, 2);
     }
 
     public static int getEnemyID(int player)
     {
-        if (player == getPlayer1ID())
-            return getPlayer2ID();
-        if (player == getPlayer2ID())
-            return getPlayer1ID();
+        if (player == Player1ID)
+            return Player2ID;
+        if (player == Player2ID)
+            return Player1ID;
         return -1;
     }
 
@@ -54,7 +45,7 @@ public class GameUtil
 
     public static int step(Board board, int from, int to, int player)
     {
-        if (to == 25 && player == getPlayer1ID() || to == 0 && player == getPlayer2ID())
+        if (to == 25 && player == Player1ID || to == 0 && player == Player2ID)
         {
             board.addBorneChecker(player);
             board.deleteChecker(from, 1);
@@ -65,7 +56,7 @@ public class GameUtil
                 return NATURAL_STEP;
         }
 
-        if (from == 0 && player == getPlayer1ID() || from == 25 && player == getPlayer2ID())
+        if (from == 0 && player == Player1ID || from == 25 && player == Player2ID)
         {
             board.minusKickedChecker(player);
         }
@@ -98,7 +89,7 @@ public class GameUtil
 
         List<Integer> result = new ArrayList<>();
 
-        if (player == getPlayer1ID())
+        if (player == Player1ID)
         {
             result = board.getFields().stream()
                     .filter(p -> p.getId() > from)
@@ -114,7 +105,7 @@ public class GameUtil
             }
         }
 
-        if (player == getPlayer2ID())
+        if (player == Player2ID)
         {
             result = board.getFields().stream()
                     .filter(p -> p.getId() < from)
@@ -141,7 +132,7 @@ public class GameUtil
 
         if (board.getKickedCheckers(player) != 0)
         {
-            if (player == getPlayer1ID())
+            if (player == Player1ID)
             {
                 result.add(0);
 
@@ -153,7 +144,7 @@ public class GameUtil
                     return result;
                 }
             }
-            if (player == getPlayer2ID())
+            if (player == Player2ID)
             {
                 result.add(25);
 
@@ -187,8 +178,8 @@ public class GameUtil
         if (board.getKickedCheckers(player) != 0)
             return false;
 
-        if ((player == getPlayer1ID() && (board.getFields().stream().filter(p -> p.getId() < 19).anyMatch(p -> p.getTeam() == player)))
-                || player == getPlayer2ID() && board.getFields().stream().filter(p -> p.getId() > 6).anyMatch(p -> p.getTeam() == player))
+        if ((player == Player1ID && (board.getFields().stream().filter(p -> p.getId() < 19).anyMatch(p -> p.getTeam() == player)))
+                || player == Player2ID && board.getFields().stream().filter(p -> p.getId() > 6).anyMatch(p -> p.getTeam() == player))
         {
                 return false;
         }

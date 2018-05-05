@@ -1,10 +1,11 @@
 
-package controller;
+package com.artibarti.backgammon.controller;
 
-import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -12,22 +13,22 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import model.Board;
-import model.Player;
-import service.XMLHandler;
-import utils.DesignManager;
-import utils.GameUtil;
-import model.Turn;
+import com.artibarti.backgammon.model.Board;
+import com.artibarti.backgammon.utils.DesignManager;
+import com.artibarti.backgammon.utils.GameUtil;
+import com.artibarti.backgammon.model.Turn;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.log;
 import static java.lang.Math.min;
+
+
 
 public class BoardController
 {
@@ -46,11 +47,14 @@ public class BoardController
     @FXML
     Label player1KickedCheckersCount, player2KickedCheckersCount, player1BorneCheckersCount, player2BorneCheckersCount;
 
+    @FXML
+    Button btnBack;
+
+    private static Logger logger = LoggerFactory.getLogger(BoardController.class);
+
     private MainController mainController;
 
     private Board board;
-    private Player player1;
-    private Player player2;
     private List<Pane> fields;
     private List<Pane> dices;
     private Turn currentTurn;
@@ -65,6 +69,10 @@ public class BoardController
     @FXML
     private void initialize()
     {
+        logger.info("enter initialize");
+
+        btnBack.setOnAction(this::backToMenu);
+
         fields = new ArrayList<>();
         dices = new ArrayList<>();
 
@@ -74,33 +82,44 @@ public class BoardController
         dices.add(dice4);
 
         designManager = new DesignManager();
-
-        player1 = new Player(GameUtil.getPlayer1ID());
-        player2 = new Player(GameUtil.getPlayer2ID());
         board = new Board();
 
-        GameUtil.initBoard(board, player1, player2);
-        XMLHandler.writeXML(board, 0);
+    }
 
+    public void resume(Board board, Turn turn)
+    {
+        logger.info("enter resume");
+
+        this.board = board;
+        this.currentTurn = turn;
+    }
+
+    public void start()
+    {
+        logger.info("enter start");
+
+        GameUtil.initBoard(board);
         nextTurn();
     }
 
     public void nextTurn()
     {
+        logger.info("enter nextTurn");
+
         if (currentTurn == null)
         {
-            currentTurn = new Turn(GameUtil.getPlayer1ID(), board);
+            currentTurn = new Turn(GameUtil.Player1ID);
             initBases();
             refresh();
         }
-        else if (currentTurn.getPlayer() == player1.getTeam())
+        else if (currentTurn.getPlayer() == GameUtil.Player1ID)
         {
-            currentTurn = new Turn(GameUtil.getPlayer2ID(), board);
+            currentTurn = new Turn(GameUtil.Player2ID);
             initBases();
         }
-        else if (currentTurn.getPlayer() == player2.getTeam())
+        else if (currentTurn.getPlayer() == GameUtil.Player2ID)
         {
-            currentTurn = new Turn(GameUtil.getPlayer1ID(), board);
+            currentTurn = new Turn(GameUtil.Player1ID);
             initBases();
         }
 
@@ -121,11 +140,13 @@ public class BoardController
 
     public void initBases()
     {
+        logger.info("enter initBases");
+
         fields.clear();
 
-        if (currentTurn.getPlayer() == GameUtil.getPlayer1ID())
+        if (currentTurn.getPlayer() == GameUtil.Player1ID)
             fields.add(hbplayer1KickedCheckers);
-        if (currentTurn.getPlayer() == GameUtil.getPlayer2ID())
+        if (currentTurn.getPlayer() == GameUtil.Player2ID)
             fields.add(hbplayer2BorneCheckers);
 
         fields.add(field1);
@@ -153,19 +174,23 @@ public class BoardController
         fields.add(field23);
         fields.add(field24);
 
-        if (currentTurn.getPlayer() == GameUtil.getPlayer1ID())
+        if (currentTurn.getPlayer() == GameUtil.Player1ID)
             fields.add(hbplayer1BorneCheckers);
-        if (currentTurn.getPlayer() == GameUtil.getPlayer2ID())
+        if (currentTurn.getPlayer() == GameUtil.Player2ID)
             fields.add(hbplayer2KickedCheckers);
 
     }
 
     public void setKeyboardEventHandler()
     {
+        logger.info("enter setKeyboardEventHandler");
+
         apBoard.getScene().addEventFilter(KeyEvent.KEY_PRESSED, keyEvent ->
         {
 
-            selectedFieldID = getNextSelectedFieldID(keyEvent.getCode());
+            logger.info("enter KeyEventHandler");
+
+            getNextSelectedFieldID(keyEvent.getCode());
             designManager.setStyle("selection", fields.get(selectedFieldID), getHighlighForField(selectedFieldID));
 
             if (keyEvent.getCode() == KeyCode.ENTER)
@@ -196,7 +221,11 @@ public class BoardController
                         if (GameUtil.step(board, currentTurn.getFrom(), selectedFieldID, currentTurn.getPlayer()) == GameUtil.WINNER_STEP)
                             endGame();
 
-                        currentTurn.removeStep(abs(currentTurn.getFrom() - selectedFieldID));
+                        if (selectedFieldID == 0 || selectedFieldID == 25)
+                            currentTurn.removeStep(abs(currentTurn.getFrom() - selectedFieldID), true);
+                        else
+                            currentTurn.removeStep(abs(currentTurn.getFrom() - selectedFieldID), false);
+
                         designManager.dropStyle("from");
                         if (currentTurn.getStepsLeft() == 0)
                         {
@@ -227,21 +256,23 @@ public class BoardController
 
     public void refresh()
     {
+        logger.info("enter refresh");
         drawBoard();
         refreshDices();
     }
 
 
-    public int getNextSelectedFieldID(KeyCode keyCode)
+    public void getNextSelectedFieldID(KeyCode keyCode)
     {
+        logger.info("enter getNextSelectedFieldID");
 
         if (keyCode == KeyCode.UP || keyCode == KeyCode.W)
         {
-            return 25 - selectedFieldID;
+            selectedFieldID = 25 - selectedFieldID;
         }
         if (keyCode == KeyCode.DOWN || keyCode == KeyCode.S)
         {
-            return 25 - selectedFieldID;
+            selectedFieldID = 25 - selectedFieldID;
         }
         if (keyCode == KeyCode.RIGHT || keyCode == KeyCode.D)
         {
@@ -265,12 +296,12 @@ public class BoardController
                 selectedFieldID = selectedFieldID + 1;
             }
         }
-
-        return selectedFieldID;
     }
 
     public void drawBoard()
     {
+        logger.info("enter drawBoard");
+
         fields.stream()
                 .filter(p -> !p.equals(hbplayer1BorneCheckers) && !p.equals(hbplayer2BorneCheckers)
                         && !p.equals(hbplayer1KickedCheckers) && !p.equals(hbplayer2KickedCheckers))
@@ -279,14 +310,17 @@ public class BoardController
         board.getFields().stream()
                 .forEach(p -> addCheckers(p.getId(), p.getTeam(), p.getNumberOfCheckers()));
 
-        player1BorneCheckersCount.setText(Integer.toString(board.getBorneCheckers(GameUtil.getPlayer1ID())));
-        player2BorneCheckersCount.setText(Integer.toString(board.getBorneCheckers(GameUtil.getPlayer2ID())));
-        player1KickedCheckersCount.setText(Integer.toString(board.getKickedCheckers(GameUtil.getPlayer1ID())));
-        player2KickedCheckersCount.setText(Integer.toString(board.getKickedCheckers(GameUtil.getPlayer2ID())));
+        player1BorneCheckersCount.setText(Integer.toString(board.getBorneCheckers(GameUtil.Player1ID)));
+        player2BorneCheckersCount.setText(Integer.toString(board.getBorneCheckers(GameUtil.Player2ID)));
+        player1KickedCheckersCount.setText(Integer.toString(board.getKickedCheckers(GameUtil.Player1ID)));
+        player2KickedCheckersCount.setText(Integer.toString(board.getKickedCheckers(GameUtil.Player2ID)));
+
     }
 
     void addCheckers(int fieldID, int team, int count)
     {
+        logger.info("enter addCheckers");
+
         try
         {
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -306,12 +340,15 @@ public class BoardController
         } catch (IOException e)
         {
             e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 
 
     public void refreshDices()
     {
+        logger.info("enter refreshDices");
+
         dices.stream().forEach(d -> d.getStyleClass().clear());
 
         for (int i = 0; i < currentTurn.getDiceNumbers().size(); i++)
@@ -323,41 +360,58 @@ public class BoardController
 
     public String getColorForDices()
     {
-        if (currentTurn.getPlayer() == GameUtil.getPlayer1ID())
-            return "white";
-        if (currentTurn.getPlayer() == GameUtil.getPlayer2ID())
-            return "black";
+        logger.info("enter getColorForDices");
 
-        return null;
+        String result = "";
+
+        if (currentTurn.getPlayer() == GameUtil.Player1ID)
+            result = "white";
+        if (currentTurn.getPlayer() == GameUtil.Player2ID)
+            result = "black";
+
+        return result;
     }
 
     public String getHighlighForField(int fieldID)
     {
+        logger.info("enter getHighlighForField");
+
+        String result = "";
+
         if (fieldID == 0 || fieldID == 25)
         {
-            return "selection_for_kicked_and_borne_fields";
+            result = "selection_for_kicked_and_borne_fields";
         }
         if (fieldID >= 1 && fieldID <= 12)
         {
-            return "selection_for_upper_fields";
+            result = "selection_for_upper_fields";
         }
         if (fieldID >= 13 && fieldID <= 24)
         {
-            return "selection_for_lower_fields";
+            result = "selection_for_lower_fields";
         }
 
-        return null;
+        return result;
     }
 
 
     public void endGame()
     {
+        logger.info("enter endGame");
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("The match is over!");
         alert.setHeaderText(null);
-        alert.setContentText("Player" + currentTurn.getPlayer() + 1 + " is the winner!");
+        alert.setContentText("Player" + (currentTurn.getPlayer() + 1) + " is the winner!");
 
         alert.showAndWait();
+        mainController.showMenu();
+
+    }
+
+    public void backToMenu(ActionEvent event)
+    {
+        logger.info("enter backToMenu");
         mainController.showMenu();
     }
 }
