@@ -3,34 +3,34 @@ package com.artibarti.backgammon.model;
 import javax.xml.bind.annotation.XmlAttribute;
 
 /**
-* Representation of a field on the Backgammon board
+* Representation of a field on the Backgammon board.
 */
 public class Field
 {
     /**
-     * Defines the player owns the field
+     * Defines the player owns the field.
      */
     private int team;
 
     /**
-     * The ID of the field
+     * The ID of the field.
      */
     private int id;
 
     /**
-     * The number of checkers on the field
+     * The number of checkers on the field.
      */
     private int numberOfCheckers;
 
     /**
-     * Default constructor for {@link Field}
+     * Default constructor for {@link Field}.
      */
     public Field() {}
 
     /**
-     * Constructor for {@link Field}
+     * Constructor for {@link Field}.
      *
-     * @param id The ID will be set as the ID of the field
+     * @param id The ID will be set as the ID of the field.
      */
     public Field(int id)
     {
@@ -40,10 +40,10 @@ public class Field
     }
 
     /**
-     * Add checkers to the field
+     * Add checkers to the field.
      *
-     * @param player The player owns the checkers
-     * @param count The number of the checkers
+     * @param player The player owns the checkers.
+     * @param count The number of the checkers.
      */
     public void addCheckers(int player, int count)
     {
@@ -52,9 +52,9 @@ public class Field
     }
 
     /**
-     * Delete checkers from the {@link Field}
+     * Delete checkers from the {@link Field}.
      *
-     * @param count The number of checkers to delete
+     * @param count The number of checkers to delete.
      */
     public void deleteChecker(int count)
     {
@@ -64,7 +64,7 @@ public class Field
     }
 
     /**
-     * Delete all checkers on board, the team of the field will be set to -1
+     * Delete all checkers on board, the team of the field will be set to -1.
      */
     public void deleteCheckers()
     {
@@ -73,9 +73,9 @@ public class Field
     }
 
     /**
-     * Methos to get the player owns the field
+     * Methos to get the player owns the field.
      *
-     * @return The ID of the player owns the field
+     * @return The ID of the player owns the field.
      */
     @XmlAttribute(name = "team")
     public int getTeam()
@@ -84,9 +84,9 @@ public class Field
     }
 
     /**
-     * Method to get the number of the checkers on the field
+     * Method to get the number of the checkers on the field.
      *
-     * @return The number of the checkers on the field
+     * @return The number of the checkers on the field.
      */
     @XmlAttribute(name = "numberOfCheckers")
     public int getNumberOfCheckers()
@@ -95,9 +95,9 @@ public class Field
     }
 
     /**
-     * Method to get the ID for the field
+     * Method to get the ID for the field.
      *
-     * @return The ID of the field
+     * @return The ID of the field.
      */
     @XmlAttribute(name = "id")
     public int getId()

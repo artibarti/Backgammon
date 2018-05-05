@@ -8,10 +8,21 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * The Main class of the project, with the necessary initialization and functions to start the application.
+ */
 public class Main extends Application {
 
+    /**
+     * Logger for Main class.
+     */
     private static Logger logger = LoggerFactory.getLogger(Main.class);
 
+    /**
+     * Start method to initialize the window of the application.
+     * @param primaryStage
+     * @throws Exception
+     */
     @Override
     public void start(Stage primaryStage) throws Exception
     {
@@ -30,6 +41,10 @@ public class Main extends Application {
     }
 
 
+    /**
+     * Main method to launch args.
+     * @param args The arguments for the application.
+     */
     public static void main(String[] args)
     {
         logger.info("enter main");

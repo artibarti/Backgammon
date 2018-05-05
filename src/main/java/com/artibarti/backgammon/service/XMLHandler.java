@@ -10,9 +10,18 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 
+/**
+ * Helper class to handle xml files.
+ */
 public class XMLHandler
 {
 
+    /**
+     * Method to read xml files.
+     * @param sourceBoard The filename of the xml storing the board information.
+     * @param sourceTurn The filename of the xml storing the turn information.
+     * @return A {@link Pair} of a {@link Board} and a {@link Turn} .
+     */
     public static Pair<Board, Turn> readXML(String sourceBoard, String sourceTurn)
     {
         Board board = null;
@@ -41,6 +50,11 @@ public class XMLHandler
     }
 
 
+    /**
+     * Method to write data to xml.
+     * @param board The board to save to xml.
+     * @param turn The turn to save to xml.
+     */
     public static void writeXML(Board board, Turn turn)
     {
         JAXBContext jaxbContext;

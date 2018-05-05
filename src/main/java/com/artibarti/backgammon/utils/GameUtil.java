@@ -8,14 +8,36 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+/**
+ * Methods and constants representing the rules of the game Backgammon.
+ */
 public class GameUtil
 {
 
+    /**
+     * Constant to describe whether a step took the last checker of a player to its base, or not.
+     */
     public static final int NATURAL_STEP = 0;
+
+    /**
+     * Constant to describe whether a step took the last checker of a player to its base, or not.
+     */
     public static final int WINNER_STEP = 1;
+
+    /**
+     * The constant value representing the first player.
+     */
     public static final int Player1ID = 0;
+
+    /**
+     * The constant value representing the second player.
+     */
     public static final int Player2ID = 1;
 
+    /**
+     * Initialize a {@link Board} according to the default state of a Backgammon board before the first step.
+     * @param board The board.
+     */
     public static void initBoard(Board board)
     {
         board.getFields().get(0).addCheckers(Player1ID, 2);
@@ -29,6 +51,11 @@ public class GameUtil
         board.getFields().get(23).addCheckers(Player2ID, 2);
     }
 
+    /**
+     * Returns the value representing the opponent player.
+     * @param player The actual player.
+     * @return The value representing the opponent player.
+     */
     public static int getEnemyID(int player)
     {
         if (player == Player1ID)
@@ -38,11 +65,23 @@ public class GameUtil
         return -1;
     }
 
+    /**
+     * Generates a random {@link Integer} between 1 and 6.
+     * @return A random {@link Integer} between 1 and 6.
+     */
     public static int generateDiceNumber()
     {
         return ThreadLocalRandom.current().nextInt(1, 7);
     }
 
+    /**
+     * Move a checker on the board according to the given parameters.
+     * @param board The board to make the step on.
+     * @param from The ID of the start {@link Field}.
+     * @param to The ID of the destination {@link Field}.
+     * @param player The actual player represented by an {@link Integer}.
+     * @return Can be {@link GameUtil#WINNER_STEP} or {@link GameUtil#NATURAL_STEP}.
+     */
     public static int step(Board board, int from, int to, int player)
     {
         if (to == 25 && player == Player1ID || to == 0 && player == Player2ID)
@@ -84,6 +123,14 @@ public class GameUtil
 
     }
 
+    /**
+     * Method to get the fields can be stepped to on the board according to the given parameters.
+     * @param board The board.
+     * @param player The actual player.
+     * @param from The ID of the source {@link Field}.
+     * @param dicenumbers A {@link List} or Integers representing the dice numbers.
+     * @return A {@link List} or Integers with the IDs of the {@link Field}s can be stepped on.
+     */
     public static List<Integer> getFieldsCanStepTo(Board board, int player, int from, List<Integer> dicenumbers)
     {
 
@@ -125,6 +172,13 @@ public class GameUtil
         return result;
     }
 
+    /**
+     * Method to get the fields can be stepped from on the board according to the given parameters.
+     * @param board The board.
+     * @param player The actual player.
+     * @param dicenumbers A {@link List} or Integers representing the dice numbers.
+     * @return A {@link List} or Integers with the IDs of the {@link Field}s can be stepped from.
+     */
     public static List<Integer> getFieldsCanStepFrom(Board board, int player, List<Integer> dicenumbers)
     {
 
@@ -173,6 +227,12 @@ public class GameUtil
         return result;
     }
 
+    /**
+     * Observe whether a player on a board can start to bear its checkers to the base.
+     * @param board The board.
+     * @param player The actual player.
+     * @return A boolean value describes whether a player can start to bear its checkers to the base.
+     */
     public static boolean canBearingOff(Board board, int player)
     {
         if (board.getKickedCheckers(player) != 0)
@@ -187,7 +247,12 @@ public class GameUtil
         return true;
     }
 
-
+    /**
+     * Observe whether a player on a board has already borne all its checkers.
+     * @param board The board.
+     * @param player The actual player.
+     * @return A boolean value describes whether a player on the board has already borne all its checkers.
+     */
     public static boolean isWinner(Board board, int player)
     {
         if (board.getFields().stream().anyMatch(p -> p.getTeam() == player) == true)

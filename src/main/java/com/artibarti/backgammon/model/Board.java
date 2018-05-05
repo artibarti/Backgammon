@@ -10,45 +10,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/*
- * Representation of a Backgammon board
+/**
+ * Representation of a Backgammon board.
  */
 @XmlRootElement
 public class Board
 {
 
     /**
-     * A list of {@link com.artibarti.backgammon.model.Field} representing the fields of the board
+     * A list of {@link com.artibarti.backgammon.model.Field} representing the fields of the board.
      * representing the 24 fields of the board.
      */
     private List<Field> fields;
 
     /**
-     * An integer value representing the kicked checkers for the first player
+     * An integer value representing the kicked checkers for the first player.
      */
     @XmlAttribute
     private int player1KickedCheckers = 0;
 
     /**
-     * An integer value representing the kicked checkers for the second player
+     * An integer value representing the kicked checkers for the second player.
      */
     @XmlAttribute
     private int player2KickedCheckers = 0;
 
     /**
-     * An integer value representing the borne checkers for the first player
+     * An integer value representing the borne checkers for the first player.
      */
     @XmlAttribute
     private int player1BorneCheckers = 0;
 
     /**
-     * An integer value representing the borne checkers for the second player
+     * An integer value representing the borne checkers for the second player.
      */
     @XmlAttribute
     private int player2BorneCheckers = 0;
 
     /**
-     * Constructor for Board
+     * Constructor.
      */
     public Board()
     {
@@ -63,9 +63,9 @@ public class Board
     }
 
     /**
-     * Getter method for fields
+     * Getter method for fields.
      *
-     * @return A list of {@link com.artibarti.backgammon.model.Field} of the fields of the board
+     * @return A list of {@link com.artibarti.backgammon.model.Field} of the fields of the board.
      */
     @XmlElementWrapper(name="fields")
     @XmlElement(name="field", type=Field.class)
@@ -75,11 +75,11 @@ public class Board
     }
 
     /**
-     * Getter method for kicked checkers
+     * Getter method for kicked checkers.
      *
-     * @param player The player to return the kicked checkers for
+     * @param player The player to return the kicked checkers for.
      *
-     * @return The number of kicked checkers for the player
+     * @return The number of kicked checkers for the player.
      */
     public int getKickedCheckers(int player)
     {
@@ -93,11 +93,11 @@ public class Board
     }
 
     /**
-     * Getter method for borne checkers
+     * Getter method for borne checkers.
      *
-     * @param player The player to return the borne checkers for
+     * @param player The player to return the borne checkers for.
      *
-     * @return The number of borne checkers for player
+     * @return The number of borne checkers for player.
      */
     public int getBorneCheckers(int player)
     {
@@ -111,9 +111,9 @@ public class Board
     }
 
     /**
-     * Method to add one kicked checker for player
+     * Method to add one kicked checker for player.
      *
-     * @param player The player to add one kicked checker for
+     * @param player The player to add one kicked checker for.
      */
     public void addKickedChecker(int player)
     {
@@ -125,9 +125,9 @@ public class Board
     }
 
     /**
-     * Method to add one borne checker for player
+     * Method to add one borne checker for player.
      *
-     * @param player The player to add one borne checker for
+     * @param player The player to add one borne checker for.
      */
     public void addBorneChecker(int player)
     {
@@ -139,9 +139,9 @@ public class Board
     }
 
     /**
-     * Method to take one kicked checker for player
+     * Method to take one kicked checker for player.
      *
-     * @param player The player to take one kicked checker from
+     * @param player The player to take one kicked checker from.
      */
     public void minusKickedChecker(int player)
     {
@@ -153,11 +153,11 @@ public class Board
     }
 
     /**
-     * Method to add one checker to field
+     * Method to add one checker to field.
      *
-     * @param fieldID The id of the field
+     * @param fieldID The id of the field.
      *
-     * @param player The player owns the checker
+     * @param player The player owns the checker.
      */
     public void addChecker(int fieldID, int player)
     {
@@ -167,11 +167,11 @@ public class Board
     }
 
     /**
-     * Method to delete checkers from a field
+     * Method to delete checkers from a field.
      *
-     * @param fieldID The id of the field
+     * @param fieldID The id of the field.
      *
-     * @param count The number of checkers
+     * @param count The number of checkers.
      */
     public void deleteChecker(int fieldID, int count)
     {
@@ -181,9 +181,9 @@ public class Board
     }
 
     /**
-     * Method to delete all checkers from a field
+     * Method to delete all checkers from a field.
      *
-     * @param fieldID The id of the field
+     * @param fieldID The id of the field.
      */
     public void deleteCheckers(int fieldID)
     {
@@ -193,9 +193,11 @@ public class Board
     }
 
     /**
-     * Method to get a {@link com.artibarti.backgammon.model.Field}
+     * Method to get a {@link com.artibarti.backgammon.model.Field}.
      *
-     * @param fieldID The id of the field
+     * @param fieldID The id of the field.
+     *
+     * @return The first {@link Field} found with the given ID.
      */
     public Field getField(int fieldID)
     {
