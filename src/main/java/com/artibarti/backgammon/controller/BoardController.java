@@ -1,6 +1,7 @@
 
 package com.artibarti.backgammon.controller;
 
+import com.artibarti.backgammon.service.XMLHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -92,6 +93,23 @@ public class BoardController
 
         this.board = board;
         this.currentTurn = turn;
+
+        initBases();
+
+        currentTurn.setChoosableFields(GameUtil.getFieldsCanStepFrom(board, currentTurn.getPlayer(), currentTurn.getDiceNumbers()));
+
+        if (currentTurn.getChoosableFields().size() != 0)
+        {
+            selectedFieldID = currentTurn.getChoosableFields().get(0);
+            designManager.setStyle("selection", fields.get(selectedFieldID), getHighlighForField(selectedFieldID));
+            refresh();
+        }
+        else
+        {
+            nextTurn();
+        }
+
+
     }
 
     public void start()
@@ -191,6 +209,7 @@ public class BoardController
             logger.info("enter KeyEventHandler");
 
             getNextSelectedFieldID(keyEvent.getCode());
+
             designManager.setStyle("selection", fields.get(selectedFieldID), getHighlighForField(selectedFieldID));
 
             if (keyEvent.getCode() == KeyCode.ENTER)
@@ -411,6 +430,7 @@ public class BoardController
 
     public void backToMenu(ActionEvent event)
     {
+        XMLHandler.writeXML(board, currentTurn);
         logger.info("enter backToMenu");
         mainController.showMenu();
     }

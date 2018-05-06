@@ -10,9 +10,8 @@
       <VBox fx:id="vbMenu" alignment="CENTER" prefHeight="480.0" prefWidth="330.0" spacing="30.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <children>
             <Button fx:id="btnStartNew" mnemonicParsing="false" text="Start New" />
-            <Button fx:id="btnOptions" mnemonicParsing="false" text="Options" />
-            <Button fx:id="btnControls" layoutX="466.0" layoutY="251.0" mnemonicParsing="false" text="Controls" />
-            <Button fx:id="btnRankings" mnemonicParsing="false" text="Rankings" />
+            <Button fx:id="btnContinue" mnemonicParsing="false" text="Continue" />
+            <Button fx:id="btnControls" mnemonicParsing="false" text="Controls" />
             <Button fx:id="btnHelp" mnemonicParsing="false" text="Help" />
             <Button fx:id="btnExit" mnemonicParsing="false" text="Exit" />
          </children>

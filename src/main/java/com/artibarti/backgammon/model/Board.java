@@ -2,10 +2,7 @@ package com.artibarti.backgammon.model;
 
 import com.artibarti.backgammon.utils.GameUtil;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +11,7 @@ import java.util.List;
  * Representation of a Backgammon board.
  */
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Board
 {
 
@@ -21,6 +19,7 @@ public class Board
      * A list of {@link com.artibarti.backgammon.model.Field} representing the fields of the board.
      * representing the 24 fields of the board.
      */
+    @XmlElement(name="field", type=Field.class)
     private List<Field> fields;
 
     /**
@@ -67,11 +66,19 @@ public class Board
      *
      * @return A list of {@link com.artibarti.backgammon.model.Field} of the fields of the board.
      */
-    @XmlElementWrapper(name="fields")
-    @XmlElement(name="field", type=Field.class)
     public List<Field> getFields()
     {
         return fields;
+    }
+
+    /**
+     * Replace the fields of the board with a new {@link List} of {@link Field} objects.
+     *
+     * @param fields The new list of {@link com.artibarti.backgammon.model.Field} .
+     */
+    public void setFields(List<Field> fields)
+    {
+        this.fields = fields;
     }
 
     /**

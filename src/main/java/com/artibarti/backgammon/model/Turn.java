@@ -2,10 +2,7 @@ package com.artibarti.backgammon.model;
 
 import com.artibarti.backgammon.utils.GameUtil;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +10,7 @@ import java.util.List;
  * Represents one turn in the game.
  */
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Turn
 {
 
@@ -30,22 +28,28 @@ public class Turn
      * The ID of the {@link com.artibarti.backgammon.model.Field} the current player is stepping from.
      * Available only in SELECT_TO mode.
      */
+    @XmlAttribute(name="from")
     private int from;
 
     /**
      * The ID of the current player.
      */
+    @XmlAttribute(name="player")
     private int player;
 
     /**
      * {@link List} of integers representing the dice numbers for the turn.
      */
+    @XmlElementWrapper(name="dices")
+    @XmlElement(name="dicenumber")
     private List<Integer> diceNumbers;
 
     /**
      * {@link List} of integers representing the IDs of the {@link com.artibarti.backgammon.model.Field}s
      * the current player can choose.
      */
+    @XmlElementWrapper(name="choosableFileds")
+    @XmlElement(name="choosableField")
     private List<Integer> choosableFields;
 
     /**
@@ -54,6 +58,7 @@ public class Turn
     public Turn()
     {
         initDiceNumbers();
+        mode = Mode.SELECT_FROM;
     }
 
     /**
@@ -81,7 +86,6 @@ public class Turn
      * Method to get the player for the turn.
      * @return The player of the turn.
      */
-    @XmlAttribute(name="playerID")
     public int getPlayer()
     {
         return player;
@@ -110,8 +114,6 @@ public class Turn
      * Method to get the dice numbers.
      * @return {@link Turn#diceNumbers}.
      */
-    @XmlElementWrapper(name="dices")
-    @XmlElement(name = "dice", type = Integer.class)
     public List<Integer> getDiceNumbers()
     {
         return diceNumbers;

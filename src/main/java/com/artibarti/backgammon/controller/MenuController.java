@@ -21,6 +21,9 @@ public class MenuController
     private Button btnHelp;
 
     @FXML
+    private Button btnContinue;
+
+    @FXML
     private Button btnExit;
 
     private static Logger logger = LoggerFactory.getLogger(HelpController.class);
@@ -37,6 +40,7 @@ public class MenuController
     {
         logger.info("enter initialize");
         btnStartNew.setOnAction(this::btnStartNewClicked);
+        btnContinue.setOnAction(this::btnContinueClicked);
         btnControls.setOnAction(this::btnControlsClicked);
         btnHelp.setOnAction(this::btnHelpClicked);
         btnExit.setOnAction(this::btnExitClicked);
@@ -45,7 +49,13 @@ public class MenuController
     private void btnStartNewClicked(ActionEvent event)
     {
         logger.info("enter btnStartNewClicked");
-        mainController.showBoard();
+        mainController.startGame();
+    }
+
+    private void btnContinueClicked(ActionEvent event)
+    {
+        logger.info("enter btnContinueClicked");
+        mainController.continueGame();
     }
 
     private void btnHelpClicked(ActionEvent event)

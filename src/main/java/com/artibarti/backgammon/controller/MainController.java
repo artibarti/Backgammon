@@ -1,9 +1,13 @@
 package com.artibarti.backgammon.controller;
 
+import com.artibarti.backgammon.model.Board;
+import com.artibarti.backgammon.model.Turn;
+import com.artibarti.backgammon.service.XMLHandler;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,9 +97,9 @@ public class MainController
 
     }
 
-    public void showBoard()
+    public void startGame()
     {
-        logger.info("enter showBoard");
+        logger.info("enter startGame");
 
         try
         {
@@ -110,6 +114,33 @@ public class MainController
             boardController.setKeyboardEventHandler();
             boardController.start();
 
+        }
+        catch (IOException e)
+        {
+            logger.error(e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
+
+    public void continueGame()
+    {
+        logger.info("enter continueGame");
+
+        try
+        {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/view/board.fxml"));
+            AnchorPane apBoard = (AnchorPane) fxmlLoader.load();
+            boardController = fxmlLoader.getController();
+            boardController.setMainController(this);
+
+            apMain.getChildren().clear();
+            apMain.getChildren().add(apBoard);
+            boardController.setKeyboardEventHandler();
+
+            Pair<Board, Turn> gameData = XMLHandler.readXML();
+            boardController.resume(gameData.getKey(), gameData.getValue());
         }
         catch (IOException e)
         {

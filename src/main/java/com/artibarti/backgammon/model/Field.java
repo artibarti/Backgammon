@@ -10,16 +10,19 @@ public class Field
     /**
      * Defines the player owns the field.
      */
+    @XmlAttribute(name = "team")
     private int team;
 
     /**
      * The ID of the field.
      */
+    @XmlAttribute(name = "id")
     private int id;
 
     /**
      * The number of checkers on the field.
      */
+    @XmlAttribute(name = "numberOfCheckers")
     private int numberOfCheckers;
 
     /**
@@ -77,7 +80,6 @@ public class Field
      *
      * @return The ID of the player owns the field.
      */
-    @XmlAttribute(name = "team")
     public int getTeam()
     {
         return team;
@@ -88,7 +90,6 @@ public class Field
      *
      * @return The number of the checkers on the field.
      */
-    @XmlAttribute(name = "numberOfCheckers")
     public int getNumberOfCheckers()
     {
         return numberOfCheckers;
@@ -99,7 +100,6 @@ public class Field
      *
      * @return The ID of the field.
      */
-    @XmlAttribute(name = "id")
     public int getId()
     {
         return id;
