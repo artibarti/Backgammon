@@ -213,4 +213,12 @@ public class Board
                 .findFirst()
                 .get();
     }
+
+    /**
+     * Remove all checkers from all fields.
+     */
+    public void clear()
+    {
+        fields.stream().forEach(p -> p.deleteCheckers());
+    }
 }

@@ -15,19 +15,54 @@ public class BackgammonRuleCheckTest
     public void TestCanStepFromRule()
     {
         Board board = new Board();
-        GameUtil.initBoard(board);
-
         List<Integer> dicenumbers = new ArrayList<>();
         dicenumbers.add(1);
         dicenumbers.add(2);
 
-        List<Integer> fieldsCanStepFrom = GameUtil.getFieldsCanStepFrom(board, GameUtil.Player1ID, dicenumbers);
+        GameUtil.initBoard(board);
 
-        assertEquals(4, fieldsCanStepFrom.size());
-        assertEquals(1, fieldsCanStepFrom.get(0).intValue());
-        assertEquals(12, fieldsCanStepFrom.get(1).intValue());
-        assertEquals(17, fieldsCanStepFrom.get(2).intValue());
-        assertEquals(19, fieldsCanStepFrom.get(3).intValue());
+        assertEquals(4, GameUtil.getFieldsCanStepFrom(board, GameUtil.Player1ID, dicenumbers).size());
+        assertEquals(1, GameUtil.getFieldsCanStepFrom(board, GameUtil.Player1ID, dicenumbers).get(0).intValue());
+        assertEquals(12, GameUtil.getFieldsCanStepFrom(board, GameUtil.Player1ID, dicenumbers).get(1).intValue());
+        assertEquals(17, GameUtil.getFieldsCanStepFrom(board, GameUtil.Player1ID, dicenumbers).get(2).intValue());
+        assertEquals(19, GameUtil.getFieldsCanStepFrom(board, GameUtil.Player1ID, dicenumbers).get(3).intValue());
+
+        assertEquals(4, GameUtil.getFieldsCanStepFrom(board, GameUtil.Player2ID, dicenumbers).size());
+        assertEquals(6, GameUtil.getFieldsCanStepFrom(board, GameUtil.Player2ID, dicenumbers).get(0).intValue());
+        assertEquals(8, GameUtil.getFieldsCanStepFrom(board, GameUtil.Player2ID, dicenumbers).get(1).intValue());
+        assertEquals(13, GameUtil.getFieldsCanStepFrom(board, GameUtil.Player2ID, dicenumbers).get(2).intValue());
+        assertEquals(24, GameUtil.getFieldsCanStepFrom(board, GameUtil.Player2ID, dicenumbers).get(3).intValue());
+
+        board.clear();
+        board.addKickedChecker(GameUtil.Player1ID);
+        board.addKickedChecker(GameUtil.Player2ID);
+        assertEquals(0, GameUtil.getFieldsCanStepFrom(board, GameUtil.Player1ID, dicenumbers).get(0).intValue());
+        assertEquals(25, GameUtil.getFieldsCanStepFrom(board, GameUtil.Player2ID, dicenumbers).get(0).intValue());
+        board.addChecker(1, GameUtil.Player2ID);
+        board.addChecker(1, GameUtil.Player2ID);
+        board.addChecker(2, GameUtil.Player2ID);
+        board.addChecker(2, GameUtil.Player2ID);
+        board.addChecker(23, GameUtil.Player1ID);
+        board.addChecker(23, GameUtil.Player1ID);
+        board.addChecker(24, GameUtil.Player1ID);
+        board.addChecker(24, GameUtil.Player1ID);
+
+        assertEquals(0, GameUtil.getFieldsCanStepFrom(board, GameUtil.Player1ID, dicenumbers).size());
+        assertEquals(0, GameUtil.getFieldsCanStepFrom(board, GameUtil.Player2ID, dicenumbers).size());
+
+        assertEquals(0, GameUtil.getFieldsCanStepFrom(board, 123, dicenumbers).size());
+
+        board.clear();
+        board.addChecker(1, GameUtil.Player1ID);
+        board.addChecker(2, GameUtil.Player2ID);
+        board.addChecker(2, GameUtil.Player2ID);
+        board.addChecker(3, GameUtil.Player2ID);
+        board.addChecker(3, GameUtil.Player2ID);
+        assertEquals(0, GameUtil.getFieldsCanStepFrom(board, GameUtil.Player1ID, dicenumbers).size());
+
+        board.addKickedChecker(GameUtil.Player1ID);
+        assertEquals(0, GameUtil.getFieldsCanStepFrom(board, 123, dicenumbers).size());
+
     }
 
     @Test
@@ -51,9 +86,21 @@ public class BackgammonRuleCheckTest
         dicenumbers.add(1);
 
         List<Integer> fieldsCanStepTo = GameUtil.getFieldsCanStepTo(board, GameUtil.Player1ID, 12, dicenumbers);
-
         assertEquals(1, fieldsCanStepTo.size());
         assertEquals(17, fieldsCanStepTo.get(0).intValue());
+
+        board = new Board();
+        board.addChecker(24, GameUtil.Player1ID);
+        fieldsCanStepTo = GameUtil.getFieldsCanStepTo(board, GameUtil.Player1ID, 24, dicenumbers);
+        assertEquals(1, fieldsCanStepTo.size());
+        assertEquals(25, fieldsCanStepTo.get(0).intValue());
+
+        board = new Board();
+        board.addChecker(0, GameUtil.Player2ID);
+        fieldsCanStepTo = GameUtil.getFieldsCanStepTo(board, GameUtil.Player2ID, 1, dicenumbers);
+        assertEquals(1, fieldsCanStepTo.size());
+        assertEquals(0, fieldsCanStepTo.get(0).intValue());
+
     }
 
     @Test
@@ -86,6 +133,7 @@ public class BackgammonRuleCheckTest
     {
         assertEquals(1, GameUtil.getEnemyID(GameUtil.Player1ID));
         assertEquals(0, GameUtil.getEnemyID(GameUtil.Player2ID));
+        assertEquals(-1, GameUtil.getEnemyID(2));
     }
 
     @Test
@@ -99,6 +147,9 @@ public class BackgammonRuleCheckTest
         board.getField(24).addCheckers(GameUtil.Player1ID, 4);
         assertEquals(true, GameUtil.canBearingOff(board, GameUtil.Player1ID) );
 
+        board = new Board();
+        board.addKickedChecker(GameUtil.Player1ID);
+        assertEquals(false, GameUtil.canBearingOff(board, GameUtil.Player1ID) );
     }
 
     @Test
@@ -106,13 +157,32 @@ public class BackgammonRuleCheckTest
     {
         Board board = new Board();
         board.getField(1).addCheckers(GameUtil.Player1ID, 1);
-        board.getField(24).addCheckers(GameUtil.Player1ID, 4);
+        board.getField(5).addCheckers(GameUtil.Player2ID, 1);
+        assertEquals(GameUtil.NATURAL_STEP, GameUtil.step(board, 1, 2, GameUtil.Player1ID));
+        assertEquals(GameUtil.NATURAL_STEP, GameUtil.step(board, 5, 3, GameUtil.Player2ID));
 
-        GameUtil.step(board, 1, 2, GameUtil.Player1ID);
-        assertEquals(0, board.getField(1).getNumberOfCheckers() );
-        assertEquals(1, board.getField(2).getNumberOfCheckers() );
-        assertEquals(-1, board.getField(1).getTeam());
-        assertEquals(GameUtil.Player1ID, board.getField(2).getTeam());
+        board = new Board();
+        board.getField(24).addCheckers(GameUtil.Player1ID, 2);
+        assertEquals(GameUtil.NATURAL_STEP, GameUtil.step(board, 24, 25, GameUtil.Player1ID));
+        assertEquals(GameUtil.WINNER_STEP, GameUtil.step(board, 24, 25, GameUtil.Player1ID));
+
+        board = new Board();
+        board.getField(1).addCheckers(GameUtil.Player2ID, 2);
+        assertEquals(GameUtil.NATURAL_STEP, GameUtil.step(board, 1, 0, GameUtil.Player2ID));
+        assertEquals(1, board.getField(1).getNumberOfCheckers());
+        assertEquals(GameUtil.WINNER_STEP, GameUtil.step(board, 1, 0, GameUtil.Player2ID));
+
+        board.addKickedChecker(GameUtil.Player1ID);
+        assertEquals(1, board.getKickedCheckers(GameUtil.Player1ID));
+        assertEquals(GameUtil.NATURAL_STEP, GameUtil.step(board, 0, 2, GameUtil.Player1ID));
+        assertEquals(0, board.getKickedCheckers(GameUtil.Player1ID));
+
+        board.getField(1).deleteCheckers();
+        board.getField(1).addCheckers(GameUtil.Player1ID, 1);
+        board.getField(2).addCheckers(GameUtil.Player2ID, 3);
+
+        assertEquals(GameUtil.NATURAL_STEP, GameUtil.step(board, 2, 1, GameUtil.Player2ID));
+
     }
 
     @Test
@@ -124,6 +194,10 @@ public class BackgammonRuleCheckTest
 
         board = new Board();
         assertEquals(true, GameUtil.isWinner(board, GameUtil.Player1ID) );
+
+        board.addKickedChecker(GameUtil.Player1ID);
+        assertEquals(false, GameUtil.isWinner(board, GameUtil.Player1ID) );
+
     }
 
 }

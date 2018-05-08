@@ -1,4 +1,4 @@
-package com.artibarti.backgammon;
+package com.artibarti.backgammon.App;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

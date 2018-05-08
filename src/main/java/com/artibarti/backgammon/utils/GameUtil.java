@@ -116,10 +116,7 @@ public class GameUtil
 
         board.addChecker(to, player);
 
-        if (isWinner(board, player))
-            return WINNER_STEP;
-        else
-            return NATURAL_STEP;
+        return NATURAL_STEP;
 
     }
 
@@ -169,6 +166,7 @@ public class GameUtil
 
         }
 
+        System.out.println(result);
         return result;
     }
 
@@ -210,21 +208,30 @@ public class GameUtil
                     return result;
                 }
             }
-        }
-
-        result = board.getFields().stream()
-                .filter(p -> p.getTeam() == player)
-                .map(Field::getId)
-                .collect(Collectors.toList());
-
-        for (int i = 0; i<result.size(); i++)
-        {
-            if (getFieldsCanStepTo(board, player, result.get(i), dicenumbers).size() != 0)
+            else
+            {
+                result.clear();
                 return result;
+            }
         }
 
-        result.clear();
-        return result;
+        else
+        {
+
+            result = board.getFields().stream()
+                    .filter(p -> p.getTeam() == player)
+                    .map(Field::getId)
+                    .collect(Collectors.toList());
+
+            for (int i = 0; i < result.size(); i++)
+            {
+                if (getFieldsCanStepTo(board, player, result.get(i), dicenumbers).size() != 0)
+                    return result;
+            }
+
+            result.clear();
+            return result;
+        }
     }
 
     /**

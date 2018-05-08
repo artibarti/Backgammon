@@ -40,7 +40,7 @@
         <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <minJdk>1.8.0</minJdk>
-        <mainClass>com.artibarti.backgammon.Main</mainClass>
+        <mainClass>com.artibarti.backgammon.App.Main</mainClass>
     </properties>
 
     <dependencies>
@@ -72,6 +72,11 @@
             <artifactId>jaxb-api</artifactId>
             <version>2.3.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.atlassian.maven.plugins</groupId>
+            <artifactId>clover-maven-plugin</artifactId>
+            <version>4.1.2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -101,7 +106,7 @@
                             </descriptorRefs>
                             <archive>
                                 <manifest>
-                                    <mainClass>com.artibarti.backgammon.Main</mainClass>
+                                    <mainClass>com.artibarti.backgammon.App.Main</mainClass>
                                 </manifest>
                             </archive>
                         </configuration>
@@ -154,14 +159,15 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.artibarti.backgammon.Main</mainClass>
+                    <mainClass>com.artibarti.backgammon.App.Main</mainClass>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+                <version>4.1.2</version>
                 <configuration>
-                    <targetPercentage>1%</targetPercentage>
+                    <targetPercentage>30%</targetPercentage>
                 </configuration>
                 <executions>
                     <execution>
