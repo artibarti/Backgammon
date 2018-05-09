@@ -1,0 +1,31 @@
+
+*** These modified files were found in JOE when it aborted on Wed May  9 13:10:04 2018
+*** JOE was aborted because the terminal closed
+
+*** File '(Unnamed)'
+/home/hallgato/Backgammon/Backgammon/.git/COMMIT_EDITMSG
+
+*** File '/home/hallgato/Backgammon/Backgammon/.git/COMMIT_EDITMSG'
+
+add tests
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Committer: hallgato <hallgato@172.22.204.204>
+#
+# On branch master
+# Your branch is up-to-date with 'origin/master'.
+#
+# Changes to be committed:
+#	new file:   art.iml
+#	modified:   src/main/java/com/artibarti/backgammon/utils/GameUtil.java
+#	modified:   src/test/java/BackgammonRuleCheckTest.java
+#	new file:   src/test/java/DesignClassTest.java
+#
+
+*** File '* Startup Log *'
+Processing '/etc/joe/editorrc'...
+Processing '/etc/joe/ftyperc'...
+Finished processing /etc/joe/ftyperc
+Finished processing /etc/joe/editorrc

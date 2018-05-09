@@ -182,56 +182,55 @@ public class GameUtil
 
         List<Integer> result = new ArrayList();
 
-        if (board.getKickedCheckers(player) != 0)
+        if (player != Player1ID && player != Player2ID)
         {
-            if (player == Player1ID)
-            {
-                result.add(0);
-
-                if(getFieldsCanStepTo(board,player,0, dicenumbers).size() != 0)
-                    return result;
-                else
-                {
-                    result.clear();
-                    return result;
-                }
-            }
-            if (player == Player2ID)
-            {
-                result.add(25);
-
-                if(getFieldsCanStepTo(board,player,25, dicenumbers).size() != 0)
-                    return result;
-                else
-                {
-                    result.clear();
-                    return result;
-                }
-            }
-            else
-            {
-                result.clear();
-                return result;
-            }
+            return result;
         }
 
         else
         {
-
-            result = board.getFields().stream()
-                    .filter(p -> p.getTeam() == player)
-                    .map(Field::getId)
-                    .collect(Collectors.toList());
-
-            for (int i = 0; i < result.size(); i++)
+            if (board.getKickedCheckers(player) != 0)
             {
-                if (getFieldsCanStepTo(board, player, result.get(i), dicenumbers).size() != 0)
-                    return result;
+                if (player == Player1ID)
+                {
+                    result.add(0);
+
+                    if(getFieldsCanStepTo(board,player,0, dicenumbers).size() != 0)
+                        return result;
+                    else
+                    {
+                        result.clear();
+                        return result;
+                    }
+                }
+                if (player == Player2ID)
+                {
+                    result.add(25);
+
+                    if(getFieldsCanStepTo(board,player,25, dicenumbers).size() != 0)
+                        return result;
+                    else
+                    {
+                        result.clear();
+                        return result;
+                    }
+                }
             }
 
-            result.clear();
-            return result;
+            else
+            {
+
+                result = board.getFields().stream()
+                        .filter(p -> p.getTeam() == player)
+                        .map(Field::getId)
+                        .collect(Collectors.toList());
+
+                return result;
+            }
+
         }
+
+        return result;
     }
 
     /**
