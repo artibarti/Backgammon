@@ -166,7 +166,6 @@ public class GameUtil
 
         }
 
-        System.out.println(result);
         return result;
     }
 
