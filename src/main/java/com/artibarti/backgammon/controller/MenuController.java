@@ -8,6 +8,11 @@ import javafx.scene.control.Button;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class MenuController
 {
 
@@ -44,6 +49,18 @@ public class MenuController
         btnControls.setOnAction(this::btnControlsClicked);
         btnHelp.setOnAction(this::btnHelpClicked);
         btnExit.setOnAction(this::btnExitClicked);
+
+        Path path_to_board = Paths.get(System.getProperty("user.home") + File.separator + "BackgammonUserData" + File.separator + "board.xml");
+        Path path_to_turn = Paths.get(System.getProperty("user.home") + File.separator + "BackgammonUserData" + File.separator + "turn.xml");
+
+        if (Files.exists(path_to_board) && Files.exists(path_to_turn))
+        {
+            btnContinue.setDisable(false);
+        }
+        else
+        {
+            btnContinue.setDisable(true);
+        }
     }
 
     private void btnStartNewClicked(ActionEvent event)
