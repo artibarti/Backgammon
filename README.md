@@ -14,7 +14,7 @@ To use the program, use the following command in the project base directory:
 
 After that you run the program by executing the generated .jar file in the target folder:
 
-	art-1.0-SNAPSHOT-jar-with-dependencies.jar
+	java -jar art-1.0-SNAPSHOT-jar-with-dependencies.jar
 
 # Generate site
 To generate the site for the project run the following command in the project base directory:
@@ -22,3 +22,11 @@ To generate the site for the project run the following command in the project ba
 	mvn site
 
 The generated site and the reports will be placed in the target/site/ folder.
+
+To generate test coverage run:
+
+	mvn clover:instrument clover:clover
+
+The generated reports will be placed under /target/site/clover.
+
+
